@@ -1,0 +1,18 @@
+.shopItem{
+    .footer{
+        margin-top: -10%;
+    }
+}
+
+.shopArchive {
+    .filter {
+        .items {
+            .item {
+                border-bottom: 1px solid #EAEAEA;
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
