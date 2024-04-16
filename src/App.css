@@ -28,7 +28,7 @@ button{
 button,input,textarea,select{
   font: inherit;
 }
-p,h1,h2,h3,h4,h5,h6,input,button,a{
+p,h1,h2,h3,h4,h5,h6,input,button,a,label,textarea{
   overflow-wrap: break-word;
   font-family: "Yekan Bakh";
   direction: rtl;
@@ -113,4 +113,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+
+.noScroll{
+  overflow: hidden;
+  height: 100vh;
 }

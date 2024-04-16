@@ -1,0 +1,15 @@
+.footer{
+    .footerTitle{
+        position: relative;
+        &::after{
+            position: absolute;
+            content: "";
+            right: 170px;
+            bottom: 50%;
+            width: 100%;
+            transform: translate(0,-50%);
+            height: 3px;
+            background: linear-gradient(144deg, rgba(0,0,0,1) 0%, rgba(130,130,130,1) 51%, rgba(255,255,255,1) 100%);;
+        }
+    }
+}

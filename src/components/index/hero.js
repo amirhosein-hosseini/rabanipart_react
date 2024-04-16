@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
     return(
-        <div className={styles.hero + " w-full h-[90vh] flex items-center justify-end"}>
+        <div className={styles.hero + " w-full h-[90vh] flex items-center justify-end mt-[-10px]"}>
             <div className={styles.herocontainer + " container w-11/12 mx-auto text-right flex flex-col gap-12"}>
                 <div className={styles.title + " max-w-xl ml-auto"}>
                     <p className="text-white font-black text-3xl mb-4">
@@ -63,4 +63,4 @@ const Hero = () => {
     )
 }
 
-export default Hero
+export default Hero;

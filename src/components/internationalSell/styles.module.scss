@@ -1,0 +1,16 @@
+.internationalSell{
+    .title{
+        p{
+            position: relative;
+            &::after{
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 1px;
+                background: black;
+                right: 220px;
+                bottom: 12px;
+            }
+        }
+    }
+}
