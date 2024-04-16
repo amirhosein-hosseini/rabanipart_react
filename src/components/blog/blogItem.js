@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 const BlogItem = () => {
     return(
-        <div className={styles.blogItem + " h-[369px] flex items-center gap-3 rounded-lg bg-[#EB0E23]"}>
+        <div className={styles.blogItem + " h-[369px] flex items-center gap-3 rounded-lg bg-[#E14957]"}>
             <div className={styles.image + " w-1/2 h-full overflow-hidden rounded-tl-lg rounded-tr-[0px] rounded-bl-lg rounded-br-[124px]"}>
                 <img className="object-cover w-full h-full" src="../../images/blogitemimage.png" alt="image" />
             </div>
