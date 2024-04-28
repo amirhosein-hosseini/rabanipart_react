@@ -91,7 +91,7 @@ const Branch = () => {
                                 <img src="../../images/hyundai.png" alt="logo" />
                             </div>
                         </div>
-                        <div className={styles.form + " relative w-3/6 max-md:w-full flex flex-col gap-5 px-10 px-0"}>
+                        <div className={styles.form + " relative w-3/6 max-md:w-full flex flex-col gap-5 px-10 max-md:px-0"}>
                             <svg className="max-md:hidden absolute left-0 top-0 h-full" width="13" height="510" viewBox="0 0 13 510" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.984383 6.5434C0.984383 9.61521 3.47458 12.1054 6.54639 12.1054C9.6182 12.1054 12.1084 9.61521 12.1084 6.5434C12.1084 3.47159 9.6182 0.981392 6.54639 0.981392C3.47458 0.981392 0.984383 3.47159 0.984383 6.5434ZM0.984383 503.474C0.984383 506.545 3.47458 509.036 6.54639 509.036C9.6182 509.036 12.1084 506.545 12.1084 503.474C12.1084 500.402 9.6182 497.912 6.54639 497.912C3.47458 497.912 0.984383 500.402 0.984383 503.474ZM5.50351 6.5434V503.474H7.58926V6.5434H5.50351Z" fill="url(#paint0_linear_216_929)"/>
                                 <defs>

@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import { SecondPrimaryButton } from "../button";
+import { Link } from "react-router-dom";
 
 const CartPopUp = () => {
 
@@ -67,9 +68,11 @@ const CartPopUp = () => {
                         </form>
                     </div>
                     <div className={styles.button}>
-                        <SecondPrimaryButton>
-                            اضافه کردن به سبد خرید 
-                        </SecondPrimaryButton>
+                        <Link to={"/basket"}>
+                            <SecondPrimaryButton>
+                                اضافه کردن به سبد خرید 
+                            </SecondPrimaryButton>
+                        </Link>
                     </div>
                 </div>
             </div>
