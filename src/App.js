@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import logo from './logo.svg';
 import './App.css';
 import HomePage from './components/index';
 import ShopArchive from "./components/shop/shopArchive";
@@ -15,11 +14,18 @@ import Footer from "./components/Footer/index.js";
 
 function App() {
   const location = useLocation();
+
   const isHomePage = location.pathname === '/';
+
+  const hideHeaderFooterRoutes = ['/login' , '/signin'];
+
+  const shouldShowHeaderFooter = !hideHeaderFooterRoutes.some(path => location.pathname.startsWith(path));
+
 
   return (
     <div>
-        <Header background={isHomePage ? "transparent" : "black"} />
+        {shouldShowHeaderFooter && <Header background={isHomePage ? "transparent" : "black"} />}
+        
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopArchive />} />
@@ -31,7 +37,7 @@ function App() {
           <Route path="/international-sell" element={<InternationalSell />} />
           <Route path="/basket" element={<Basket />} />
         </Routes>
-        <Footer />
+        {shouldShowHeaderFooter && <Footer />}
     </div>
   );
 }

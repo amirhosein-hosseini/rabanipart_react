@@ -5,7 +5,7 @@ import { BlackPrimaryButton } from "../button";
 
 const InternationalSell = () => {
     return(
-        <div className={styles.internationalSell + " mt-20 mb-20"}>
+        <div className={styles.internationalSell + " mt-40 mb-20 max-md:mt-20"}>
             <div className={styles.container + " container w-11/12 mx-auto overflow-hidden"}>
                 <div className={styles.title + " mb-10"}>
                     <p className="font-bold text-xl">
@@ -13,27 +13,27 @@ const InternationalSell = () => {
                     </p>
                 </div>
                 <form>
-                    <div className={styles.formgroup + " w-full flex gap-3 mb-3"}>
-                        <div className="w-1/2">
+                    <div className={styles.formgroup + " w-full flex max-md:flex-col gap-3 mb-3"}>
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="نام نام خانوادگی " />
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="شماره تماس " />
                         </div>
                     </div>
-                    <div className={styles.formgroup + " w-full flex gap-3 mb-3"}>
-                        <div className="w-1/2">
+                    <div className={styles.formgroup + " w-full flex max-md:flex-col gap-3 mb-3"}>
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="نام کالا " />
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="شماره کد محصول " />
                         </div>
                     </div>
-                    <div className={styles.formgroup + " w-full flex gap-3 mb-3"}>
-                        <div className="w-1/2">
+                    <div className={styles.formgroup + " w-full flex max-md:flex-col gap-3 mb-3"}>
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="نوع خودرو - سال تولید" />
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-1/2 max-md:w-full">
                             <input className="p-2 w-full bg-[#C8C8C8]" type="text" placeholder="شماره شاسی خودرو " />
                         </div>
                     </div>

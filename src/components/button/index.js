@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 export const RedPrimaryButton = ({children}) => {
     return(
-        <button className={styles.primarybtn + " bg-[#EB0E23] text-white px-4 py-[7px] rounded-lg"}>
+        <button className={styles.primarybtn + " bg-[#EB0E23] text-white px-4 max-md:px-2 py-[7px] max-md:py-[5px] rounded-lg max-md:text-xs"}>
             {children}
         </button>
     )

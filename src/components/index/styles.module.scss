@@ -3,6 +3,9 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    // @media only screen and (max-width:768px){
+    //     background-image: url("../../../public/images/mobilehero.png");
+    // }
     .herocontainer{
         .search{
             input{
@@ -37,6 +40,27 @@
             height: 3px;
             background: linear-gradient(144deg, rgba(235,14,35,1) 0%, rgba(0,0,0,0) 100%);
             width: 100%;
+        }
+    }
+}
+
+.indexBlog{
+    @media only screen and (max-width:768px){
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: normal;
+        display: flex;
+    }
+}
+
+.brancWrapper{
+    .form{
+        form{
+            .button{
+                button{
+                    width: 120px !important;
+                }
+            }
         }
     }
 }

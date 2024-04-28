@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 const BlogItem = () => {
     return(
-        <div className={styles.blogItem + " h-[369px] flex items-center gap-3 rounded-lg bg-[#E14957]"}>
+        <div className={styles.blogItem + " h-[369px] max-md:h-[280px] flex items-center gap-3 rounded-lg bg-[#E14957] mt-20"}>
             <div className={styles.image + " w-1/2 h-full overflow-hidden rounded-tl-lg rounded-tr-[0px] rounded-bl-lg rounded-br-[124px]"}>
                 <img className="object-cover w-full h-full" src="../../images/blogitemimage.png" alt="image" />
             </div>
@@ -11,13 +11,12 @@ const BlogItem = () => {
                 <p className="text-white text-[8px]">
                     تعمیر و نگهداری، مقالات آموزشی و معرفی قطعات خودرو
                 </p>
-                <p className="text-white text-sm font-bold">
+                <p className="text-white text-sm font-bold max-md:text-xs">
                     رایج ترین مشکلات خودروهای هیوندای چیست؟
                 </p>
-                <p className="text-white text-xs font-light leading-5">
+                <p className="text-white text-xs font-light leading-5 max-md:text-[9px]">
                     اگر می‌خواهید در آینده نزدیک یکی از خودروهای شرکت هیوندای را بخرید یا اکنون مالک یکی از آن‌ها هستید، 
-                    باید با رایج‌ترین مشکلات هیوندای و نحوه رسیدگی موثر به آن‌ها آشنا شوید...اگر می‌خواهید در آینده نزدیک یکی از خودروهای شرکت هیوندای را بخرید یا اکنون مالک یکی از آن‌ها هستید، 
-                    باید با رایج‌ترین مشکلات هیوندای و نحوه رسیدگی موثر به آن‌ها آشنا شوید... 
+                    باید با رایج‌ترین مشکلات هیوندای و نحوه رسیدگی موثر به آن‌ها آشنا شوید...اگر می‌خواهید در آینده نزدیک یکی اد، 
                 </p>
                 <button>
                     ادامه

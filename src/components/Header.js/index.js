@@ -24,21 +24,21 @@ const Header = ({background}) => {
 
 
     return(
-        <div className={`${styles.header} ${styles.sticky} bg-${scrolled ? "black" : background} py-6 duration-300`}>
+        <div className={`${styles.header} ${styles.sticky} bg-${scrolled ? "black" : background} py-6 duration-300 max-md:hidden`}>
             <div className={styles.nav + " container w-11/12 mx-auto flex items-center justify-between"}>
                 <div className="flex items-center gap-10">
                     <div className={styles.logo}>
                         <img className="w-[65px]" src="../../images/headerlogo.png" alt="logo" />
                     </div>
                     <div className={styles.icons + " flex items-center gap-3"}>
-                        <Link to={"/"}>
+                        <Link to={"/basket"}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 29 28" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M2.41663 4.66667C2.41663 4.02233 2.95762 3.5 3.62496 3.5H4.15475C5.81814 3.5 7.26808 4.59304 7.67152 6.15112L7.89131 7H22.3623C24.6814 7 26.4041 9.07346 25.901 11.2593L24.5584 17.0926C24.1898 18.694 22.7187 19.8333 21.0197 19.8333H11.5535C9.89011 19.8333 8.44017 18.7403 8.03674 17.1822L5.32701 6.71704C5.19253 6.19768 4.70921 5.83333 4.15475 5.83333H3.62496C2.95762 5.83333 2.41663 5.311 2.41663 4.66667ZM8.49548 9.33333L10.3812 16.6163C10.5157 17.1357 10.999 17.5 11.5535 17.5H21.0197C21.5861 17.5 22.0764 17.1202 22.1993 16.5864L23.5419 10.7531C23.7096 10.0245 23.1353 9.33333 22.3623 9.33333H8.49548Z" fill="white"/>
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4791 24.5C12.4801 24.5 13.2916 23.7165 13.2916 22.75C13.2916 21.7835 12.4801 21 11.4791 21C10.4781 21 9.66663 21.7835 9.66663 22.75C9.66663 23.7165 10.4781 24.5 11.4791 24.5Z" fill="white"/>
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1459 24.5C22.1469 24.5 22.9584 23.7165 22.9584 22.75C22.9584 21.7835 22.1469 21 21.1459 21C20.1449 21 19.3334 21.7835 19.3334 22.75C19.3334 23.7165 20.1449 24.5 21.1459 24.5Z" fill="white"/>
                             </svg>
                         </Link>
-                        <Link to={"/"}>
+                        <Link to={"/login"}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 29 28" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 11.6668C16.5021 11.6668 18.125 10.0998 18.125 8.16683C18.125 6.23383 16.5021 4.66683 14.5 4.66683C12.498 4.66683 10.875 6.23383 10.875 8.16683C10.875 10.0998 12.498 11.6668 14.5 11.6668ZM14.5 14.0002C17.8368 14.0002 20.5417 11.3885 20.5417 8.16683C20.5417 4.94517 17.8368 2.3335 14.5 2.3335C11.1633 2.3335 8.45837 4.94517 8.45837 8.16683C8.45837 11.3885 11.1633 14.0002 14.5 14.0002Z" fill="white"/>
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.875 18.6668C8.20562 18.6668 6.04167 20.7562 6.04167 23.3335V24.5002C6.04167 25.1445 5.50068 25.6668 4.83333 25.6668C4.16599 25.6668 3.625 25.1445 3.625 24.5002V23.3335C3.625 19.4675 6.87094 16.3335 10.875 16.3335H18.125C22.1291 16.3335 25.375 19.4675 25.375 23.3335V24.5002C25.375 25.1445 24.834 25.6668 24.1667 25.6668C23.4993 25.6668 22.9583 25.1445 22.9583 24.5002V23.3335C22.9583 20.7562 20.7944 18.6668 18.125 18.6668H10.875Z" fill="white"/>
@@ -57,13 +57,13 @@ const Header = ({background}) => {
                             <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>خانه</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>فروشگاه</Link>
+                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/shop"}>فروشگاه</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>پشتیبانی</Link>
+                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/blog"}>بلاگ</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>قوانین</Link>
+                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/international-sell"}>خرید بین المللی</Link>
                         </li>
                         <li>
                             <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>درباره ما</Link>

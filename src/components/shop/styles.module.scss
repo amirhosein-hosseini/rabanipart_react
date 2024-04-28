@@ -1,6 +1,9 @@
 .shopItem{
     .footer{
         margin-top: -10%;
+        @media only screen and (max-width:768px){
+            margin-top: 0px;
+        }
     }
 }
 
@@ -38,4 +41,17 @@
 
 .cartPopUp{
     background: rgba(68, 68, 68, 0.8);
+}
+
+.mobileFilter{
+    button{
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+}
+
+.shopArchive{
+    .overlay{
+        background: rgba(0, 0, 0, 0.5);
+    }
 }

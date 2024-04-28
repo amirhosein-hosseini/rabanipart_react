@@ -6,7 +6,7 @@ import ActiveShopItem from "../shop/activeShopItem";
 
 const Basket = () => {
     return(
-        <div className={styles.basket + " mt-10 mb-10"}>
+        <div className={styles.basket + " mt-40 mb-10 max-md:mt-20"}>
             <div className={styles.basketContainer + " container w-11/12 mx-auto"}>
                 <div className={styles.title + " flex text-right justify-end"}>
                     <div className={styles.titleContainer + " flex text-right items-center gap-2"}>
@@ -18,8 +18,8 @@ const Basket = () => {
                         </svg>
                     </div>
                 </div>
-                <div className={styles.basketWrapper + " flex items-start p-5 gap-10 justify-between mt-10"}>
-                    <div className={styles.desc + " w-1/3 flex flex-col justify-center items-center"}>
+                <div className={styles.basketWrapper + " flex max-md:flex-col-reverse items-start p-5 gap-10 justify-between mt-10"}>
+                    <div className={styles.desc + " w-1/3 max-md:w-full flex flex-col justify-center items-center"}>
                         <div className={styles.image}>
                             <img src="../../images/basketvector.png" alt="image" />
                         </div>
@@ -39,7 +39,7 @@ const Basket = () => {
                             </RedPrimaryButton>
                         </div>
                     </div>
-                    <div className={styles.items + " w-2/3"}>
+                    <div className={styles.items + " w-2/3 max-md:w-full"}>
                         <BasketItem />
                         {/* <BasketItem /> */}
                     </div>
@@ -51,11 +51,7 @@ const Basket = () => {
                     <p className={styles.title + " font-bold text-xl"}>
                         پیشنهادات ویژه :
                     </p>
-                    <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-2"}>
-                        <ActiveShopItem />
-                        <ActiveShopItem />
-                        <ActiveShopItem />
-                        <ActiveShopItem />
+                    <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-1"}>
                         <ActiveShopItem />
                         <ActiveShopItem />
                         <ActiveShopItem />

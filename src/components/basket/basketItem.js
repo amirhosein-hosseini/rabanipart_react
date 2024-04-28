@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 const BasketItem = () => {
     return(
-        <div className={styles.basketItem + " w-full justify-end flex items-center gap-4"}>
+        <div className={styles.basketItem + " w-full justify-end flex max-md:flex-col-reverse max-md:border-b max-md:border-b-black max-md:pb-5 items-center gap-4"}>
             <div className={styles.desc}>
                 <p className="text-sm font-bold"> ميل لنگ هیوندای آزرا اصلی 2008 23110-3C140</p>
                 <div className="flex justify-end items-center gap-2 mt-2">

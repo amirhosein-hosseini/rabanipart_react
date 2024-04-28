@@ -121,9 +121,9 @@ const Login = () => {
                             </SecondPrimaryButton>
                         </div>
                         <div className="grid w-full">
-                            <Link to={"/signin"}>
+                            <Link to={"/login"}>
                                 <OutlineBlackButton>
-                                    ثبت نام
+                                    از قبل ثبت نام کردید
                                 </OutlineBlackButton>
                             </Link>
                         </div>

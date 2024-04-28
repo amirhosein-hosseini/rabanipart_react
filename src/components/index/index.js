@@ -16,10 +16,10 @@ const HomePage = () => {
 
             <div className={styles.indexContact + " flex flex-col container w-11/12 mx-auto mt-20 mb-20"}>
                 <div className={styles.header + " text-right flex flex-col gap-2"}>
-                    <p className="font-bold text-xl">
+                    <p className="font-bold text-xl max-md:text-sm">
                         راهنمای خرید محصولات لوازم یدکی KIA و HYUNDAI
                     </p>
-                    <p className="text-xl">
+                    <p className="text-xl max-md:text-xs">
                         برای خرید محصولات ربانی پارت با پشتیبانی ما در تماس باشید
                     </p>
                     <div className={styles.button}>
@@ -41,7 +41,7 @@ const HomePage = () => {
             <Faq />
 
 
-            <div className={styles.indexBlog + " container max-w-6xl w-11/12 mx-auto grid grid-cols-2  gap-4 mt-20"}>
+            <div className={styles.indexBlog + " container max-w-6xl w-11/12 mx-auto grid grid-cols-2 max-md:flex  gap-4 mt-20"}>
                 <BlogItem />
                 <BlogItem />
                 <BlogItem />
@@ -60,7 +60,7 @@ const HomePage = () => {
 
 
             <div className={styles.appInstall + " container max-w-5xl w-11/12 mx-auto flex items-center justify-center mt-20 mb-20"}>
-                <button className="bg-black px-10 py-4 text-white text-xl font-bold rounded-lg">
+                <button className="bg-black px-10 py-4 text-white text-xl max-md:text-xs max-md:px-5 font-bold rounded-lg">
                     نصب اپلیکیشن هوشمند گیرپاچ 
                 </button>
             </div>

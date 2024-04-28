@@ -65,7 +65,7 @@ const SingleShop = () => {
 
     return(
         <>
-            <div className={styles.singleShop + " relative mb-20"}>
+            <div className={styles.singleShop + " relative mb-20 mt-20 max-md:mt-0"}>
 
                 {showPopUp === true? 
                     <div onClick={() => setShowPopUp(false)}>
@@ -77,25 +77,25 @@ const SingleShop = () => {
                 <SpecialSaleBanner />
 
                 <div className={styles.container + " container w-11/12 mx-auto flex flex-col gap-20"}>
-                    <div className={styles.image + " flex gap-10 items-center"}>
-                        <div className={styles.video + " w-1/2"}>
+                    <div className={styles.image + " flex gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
+                        <div className={styles.video + " w-1/2 max-md:w-full"}>
                             <img className="object-cover w-full h-full" src="../../images/video.png" alt="image" />
                         </div>
-                        <div className={styles.gallery + " w-1/2"}>
+                        <div className={styles.gallery + " w-1/2 max-md:w-full"}>
                             <MyImageGallery />
                         </div>
                     </div>
 
 
                     <div className={styles.desc + " flex flex-col gap-7"}>
-                        <p className={styles.title + " font-bold text-xl"}>
+                        <p className={styles.title + " font-bold text-xl max-md:text-lg max-md:mb-6"}>
                             ميل لنگ هیوندای آزرا اصلی 2008 23110-3C140
                         </p>
-                        <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4"}>
-                            <p className={styles.label + " absolute top-[-15px] left-[17px] bg-[#FC0F0F] text-white px-2 rounded-2xl text-center text-xs"}>به روز رسانی هر  <span className="text-lg mr-2">۱۲ ساعت</span></p>
-                            <p>میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</p>
-                            <div className={styles.footer + " flex items-center justify-between"}>
-                                <div>
+                        <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4 max-md:border-none"}>
+                            <p className={styles.label + " absolute top-[-15px] left-[17px] max-md:left-0 bg-[#FC0F0F] text-white px-2 rounded-2xl text-center text-xs max-md:text-[12px]"}>به روز رسانی هر  <span className="text-lg mr-2 max-md:text-[11px]">۱۲ ساعت</span></p>
+                            <p className="max-md:text-sm">میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</p>
+                            <div className={styles.footer + " flex max-md:flex-col-reverse items-center justify-between"}>
+                                <div className="max-md:flex max-md:flex-row-reverse max-md:justify-between max-md:items-center max-md:w-full">
                                     <p className="font-bold">۱۲۰,۰۰۰,۰۰۰ تومان</p>
                                     <div onClick={addToCart}>
                                         <RedPrimaryButton>
@@ -103,7 +103,7 @@ const SingleShop = () => {
                                         </RedPrimaryButton>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 max-md:w-full max-md:mb-5">
                                     <div className="flex justify-end items-center gap-1">
                                         <p>ربانی پارت </p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50" fill="none">
@@ -129,11 +129,7 @@ const SingleShop = () => {
                         <p className={styles.title + " font-bold text-xl"}>
                             محصولات مرتبط 
                         </p>
-                        <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-2"}>
-                            <ActiveShopItem />
-                            <ActiveShopItem />
-                            <ActiveShopItem />
-                            <ActiveShopItem />
+                        <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-1"}>
                             <ActiveShopItem />
                             <ActiveShopItem />
                             <ActiveShopItem />
@@ -143,7 +139,7 @@ const SingleShop = () => {
 
 
 
-                    <div className="mt-20">
+                    <div className="mt-20 max-md:mt-0">
                         <Faq />
                     </div>
                 </div>

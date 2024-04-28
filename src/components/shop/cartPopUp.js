@@ -11,7 +11,7 @@ const CartPopUp = () => {
 
     return(
         <div className={styles.cartPopUp + " absolute top-0 left-0 w-full h-full z-50 flex items-start pt-[150px] justify-center"}>
-            <div className={styles.container + " rounded-lg overflow-hidden w-5/12 bg-white"}>
+            <div className={styles.container + " rounded-lg overflow-hidden w-5/12 max-md:w-11/12 bg-white"}>
                 <div className={styles.header + " bg-[#E14957] flex items-center justify-between px-4 py-1"}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 70 70" fill="none">
                         <path d="M51.3331 15.4876L34.8539 6.6209C33.1039 5.68757 31.0331 5.68757 29.2831 6.6209L12.8331 15.4876C11.6372 16.1584 10.8789 17.4417 10.8789 18.8417C10.8789 20.2709 11.6081 21.5542 12.8331 22.1959L29.3122 31.0626C30.1872 31.5292 31.1497 31.7626 32.0831 31.7626C33.0164 31.7626 34.0081 31.5292 34.8539 31.0626L51.3331 22.1959C52.5289 21.5542 53.2872 20.2709 53.2872 18.8417C53.2872 17.4417 52.5289 16.1584 51.3331 15.4876Z" fill="white"/>

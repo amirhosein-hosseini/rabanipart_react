@@ -5,8 +5,8 @@ import Faq from "../faq";
 
 const ArchiveBlog = () => {
     return(
-        <div className={styles.archiveBlog}>
-            <div className={styles.header + " w-full overflow-hidden rounded-br-[135.77px]"}>
+        <div className={styles.archiveBlog + " mt-20"}>
+            <div className={styles.header + " w-full overflow-hidden rounded-br-[135.77px] max-md:rounded-br-[0px]"}>
                 <img className="object-contain w-full" src="../../images/blogheader.png" alt="image" />
             </div>
 
