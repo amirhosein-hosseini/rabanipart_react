@@ -13,3 +13,12 @@
     z-index: 1000; /* Adjust as needed */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow when sticky */
 }
+
+
+.mobileNavbar{
+    top: 20px;
+    background: white;
+    left: 50%;
+    transform: translate(-50%,0);
+    box-shadow: 0px 1px 14.3px 0px rgba(0, 0, 0, 0.15);
+}

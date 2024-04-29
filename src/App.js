@@ -11,6 +11,8 @@ import InternationalSell from "./components/internationalSell";
 import Basket from "./components/basket";
 import Header from "./components/Header.js";
 import Footer from "./components/Footer/index.js";
+import MobileNavbar from "./components/Header.js/mobileNavbar";
+import Panel from "./components/panel";
 
 function App() {
   const location = useLocation();
@@ -25,6 +27,7 @@ function App() {
   return (
     <div>
         {shouldShowHeaderFooter && <Header background={isHomePage ? "transparent" : "black"} />}
+        {shouldShowHeaderFooter && <MobileNavbar />}
         
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -36,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/international-sell" element={<InternationalSell />} />
           <Route path="/basket" element={<Basket />} />
+          <Route path="/panel" element={<Panel />} />
         </Routes>
         {shouldShowHeaderFooter && <Footer />}
     </div>

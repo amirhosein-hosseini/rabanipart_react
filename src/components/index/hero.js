@@ -21,7 +21,7 @@ const Hero = () => {
                         type="text" 
                         placeholder="نام و کد قطعه مورد نظر را بنویسید" 
                     />
-                    <div className="absolute top-[3px] right-[4px]">
+                    <div className="absolute top-[6px] right-[5px] max-md:top-[3px] max-md:right-[4px]">
                         <Link to={"/shop"}>
                             <RedPrimaryButton>
                                 جستجو قطعات  

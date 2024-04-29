@@ -5,7 +5,7 @@ import { BlackPrimaryButton } from "../button";
 
 const InternationalSell = () => {
     return(
-        <div className={styles.internationalSell + " mt-40 mb-20 max-md:mt-20"}>
+        <div className={styles.internationalSell + " pt-40 mb-20 max-md:mt-20"}>
             <div className={styles.container + " container w-11/12 mx-auto overflow-hidden"}>
                 <div className={styles.title + " mb-10"}>
                     <p className="font-bold text-xl">

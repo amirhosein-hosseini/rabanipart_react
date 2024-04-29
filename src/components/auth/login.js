@@ -63,9 +63,11 @@ const Login = () => {
                     </div>
                     <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
                         <div className="grid w-full">
-                            <SecondPrimaryButton>
-                                ورود
-                            </SecondPrimaryButton>
+                            <Link to={"/panel"}>
+                                <SecondPrimaryButton>
+                                    ورود
+                                </SecondPrimaryButton>
+                            </Link>
                         </div>
                         <div className="grid w-full">
                             <Link to={"/signin"}>

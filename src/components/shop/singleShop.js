@@ -65,7 +65,7 @@ const SingleShop = () => {
 
     return(
         <>
-            <div className={styles.singleShop + " relative mb-20 mt-20 max-md:mt-0"}>
+            <div className={styles.singleShop + " relative mb-20 mt-20 max-md:mt-20"}>
 
                 {showPopUp === true? 
                     <div onClick={() => setShowPopUp(false)}>
