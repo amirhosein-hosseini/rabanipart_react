@@ -77,7 +77,7 @@ const SingleShop = () => {
                 <SpecialSaleBanner />
 
                 <div className={styles.container + " container w-11/12 mx-auto flex flex-col gap-20"}>
-                    <div className={styles.image + " flex gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
+                    <div className={styles.image + " flex gap-10 max-w-5xl mt-20 mx-auto gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
                         <div className={styles.video + " w-1/2 max-md:w-full"}>
                             <img className="object-cover w-full h-full" src="../../images/video.png" alt="image" />
                         </div>
