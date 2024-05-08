@@ -6,12 +6,16 @@ import Faq from "../faq";
 import MyImageGallery from "../gallery/imageGallery";
 import { SpecialSaleBanner } from "../banner";
 import CartPopUp from "./cartPopUp";
+import { useParams } from "react-router-dom";
+import { showProduct } from "../../api/shop";
 
 
 const SingleShop = () => {
 
 
+    const params = useParams();
     const [showPopUp , setShowPopUp] = useState(false);
+    const [data , setData] = useState(null);
     const propUpRef = useRef(null);
 
 
@@ -63,6 +67,33 @@ const SingleShop = () => {
     }, [showPopUp]);
 
 
+
+    // get data for product item
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await showProduct(params.slug);
+            setData(data?.data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+
+    data?.guarantee?.map((item)=> {
+        console.log(item)
+    })
+
+    const parsToArray = (string) => {
+        let actualArray = JSON.parse(string);
+        return actualArray
+    }
+
+
+
     return(
         <>
             <div className={styles.singleShop + " relative mb-20 mt-20 max-md:mt-20"}>
@@ -77,26 +108,27 @@ const SingleShop = () => {
                 <SpecialSaleBanner />
 
                 <div className={styles.container + " container w-11/12 mx-auto flex flex-col gap-20"}>
-                    <div className={styles.image + " flex gap-10 max-w-5xl mt-20 mx-auto gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
-                        <div className={styles.video + " w-1/2 max-md:w-full"}>
+                    <div className={styles.image + " flex justify-center gap-10 max-w-5xl mt-20 mx-auto gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
+                        {/* <div className={styles.video + " w-1/2 max-md:w-full"}>
                             <img className="object-cover w-full h-full" src="../../images/video.png" alt="image" />
-                        </div>
+                        </div> */}
                         <div className={styles.gallery + " w-1/2 max-md:w-full"}>
-                            <MyImageGallery />
+                            {data?.product?.image != undefined ? <MyImageGallery data={parsToArray(data?.product?.image)} /> : ""}
                         </div>
                     </div>
 
 
                     <div className={styles.desc + " flex flex-col gap-7"}>
                         <p className={styles.title + " font-bold text-xl max-md:text-lg max-md:mb-6"}>
-                            ميل لنگ هیوندای آزرا اصلی 2008 23110-3C140
+                            {data?.product?.title}
                         </p>
                         <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4 max-md:border-none"}>
                             <p className={styles.label + " absolute top-[-15px] left-[17px] max-md:left-0 bg-[#FC0F0F] text-white px-2 rounded-2xl text-center text-xs max-md:text-[12px]"}>به روز رسانی هر  <span className="text-lg mr-2 max-md:text-[11px]">۱۲ ساعت</span></p>
-                            <p className="max-md:text-sm">میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</p>
+                            {/* <div className="max-md:text-sm" dangerouslySetInnerHTML={{ __html: data?.product?.body}}>میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</div> */}
+                            <p className="max-md:text-sm">{data?.product?.body}</p>
                             <div className={styles.footer + " flex max-md:flex-col-reverse items-center justify-between"}>
                                 <div className="max-md:flex max-md:flex-row-reverse max-md:justify-between max-md:items-center max-md:w-full">
-                                    <p className="font-bold">۱۲۰,۰۰۰,۰۰۰ تومان</p>
+                                    <p className="font-bold">{data?.product?.offPrice} تومان</p>
                                     <div onClick={addToCart}>
                                         <RedPrimaryButton>
                                             افزودن به سبد خرید 
@@ -113,30 +145,31 @@ const SingleShop = () => {
                                             <path d="M45.7915 32.6458C44.0832 30.5416 41.479 29.2083 38.5415 29.2083C36.3332 29.2083 34.2915 29.9791 32.6873 31.2708C30.5207 32.9791 29.1665 35.6249 29.1665 38.5833C29.1665 40.3333 29.6665 41.9999 30.5207 43.4166C31.0832 44.3541 31.7915 45.1666 32.6248 45.8333H32.6457C34.2498 47.1666 36.3123 47.9583 38.5415 47.9583C40.9165 47.9583 43.0623 47.0833 44.7082 45.6249C45.4373 44.9999 46.0623 44.2499 46.5623 43.4166C47.4165 41.9999 47.9165 40.3333 47.9165 38.5833C47.9165 36.3333 47.1248 34.2499 45.7915 32.6458ZM43.2498 37.4166L38.2498 42.0416C37.9582 42.3124 37.5623 42.4583 37.1873 42.4583C36.7915 42.4583 36.3957 42.3124 36.0832 41.9999L33.7707 39.6874C33.1665 39.0833 33.1665 38.0833 33.7707 37.4791C34.3748 36.8749 35.3748 36.8749 35.979 37.4791L37.229 38.7291L41.1248 35.1249C41.7498 34.5416 42.7498 34.5833 43.3332 35.2083C43.9373 35.8541 43.8957 36.8332 43.2498 37.4166Z" fill="#29BE2F"/>
                                         </svg>
                                     </div>
-                                    <div className="flex justify-end items-center gap-1">
-                                        <p>گارانتی اصالت و سلامت فیزیکی کالا</p>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 46 46" fill="none">
-                                            <path d="M35.535 7.89669L24.9934 3.94836C23.9009 3.54586 22.1184 3.54586 21.0259 3.94836L10.4842 7.89669C8.45253 8.66336 6.8042 11.04 6.8042 13.2059V28.7309C6.8042 30.2834 7.82003 32.3342 9.06587 33.2542L19.6075 41.1317C21.4667 42.5309 24.5142 42.5309 26.3734 41.1317L36.915 33.2542C38.1609 32.315 39.1767 30.2834 39.1767 28.7309V13.2059C39.1959 11.04 37.5475 8.66336 35.535 7.89669ZM29.67 18.63L21.4284 26.8717C21.1409 27.1592 20.7767 27.2934 20.4125 27.2934C20.0484 27.2934 19.6842 27.1592 19.3967 26.8717L16.33 23.7667C15.7742 23.2109 15.7742 22.2909 16.33 21.735C16.8859 21.1792 17.8059 21.1792 18.3617 21.735L20.4317 23.805L27.6575 16.5792C28.2134 16.0234 29.1334 16.0234 29.6892 16.5792C30.245 17.135 30.245 18.0742 29.67 18.63Z" fill="#292D32"/>
-                                        </svg>
-                                    </div>
+                                    {data?.product?.guarantee?.map((item) => (
+                                        <div className="flex justify-end items-center gap-1">
+                                            <p>{item?.name}</p>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 46 46" fill="none">
+                                                <path d="M35.535 7.89669L24.9934 3.94836C23.9009 3.54586 22.1184 3.54586 21.0259 3.94836L10.4842 7.89669C8.45253 8.66336 6.8042 11.04 6.8042 13.2059V28.7309C6.8042 30.2834 7.82003 32.3342 9.06587 33.2542L19.6075 41.1317C21.4667 42.5309 24.5142 42.5309 26.3734 41.1317L36.915 33.2542C38.1609 32.315 39.1767 30.2834 39.1767 28.7309V13.2059C39.1959 11.04 37.5475 8.66336 35.535 7.89669ZM29.67 18.63L21.4284 26.8717C21.1409 27.1592 20.7767 27.2934 20.4125 27.2934C20.0484 27.2934 19.6842 27.1592 19.3967 26.8717L16.33 23.7667C15.7742 23.2109 15.7742 22.2909 16.33 21.735C16.8859 21.1792 17.8059 21.1792 18.3617 21.735L20.4317 23.805L27.6575 16.5792C28.2134 16.0234 29.1334 16.0234 29.6892 16.5792C30.245 17.135 30.245 18.0742 29.67 18.63Z" fill="#292D32"/>
+                                            </svg>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-                    <div className={styles.related + " flex flex-col gap-7"}>
-                        <p className={styles.title + " font-bold text-xl"}>
-                            محصولات مرتبط 
-                        </p>
-                        <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-1"}>
-                            <ActiveShopItem />
-                            <ActiveShopItem />
-                            <ActiveShopItem />
-                            <ActiveShopItem />
-                        </div>
-                    </div>
-
+                    {data?.product?.related?.length > 0 ? 
+                        <div className={styles.related + " flex flex-col gap-7"}>
+                            <p className={styles.title + " font-bold text-xl"}>
+                                محصولات مرتبط 
+                            </p>
+                            <div className={styles.items + " grid grid-cols-4 gap-4 max-w-5xl mx-auto max-lg:grid-cols-3 max-md:grid-cols-1"}>
+                                {data?.product?.related?.map((item) => (
+                                    <ActiveShopItem slug={item?.slug} image={parsToArray(item?.image)[0]} title={item?.title} price={item?.offPrice} />
+                                ))}
+                            </div>
+                        </div> : ""
+                    }
 
 
                     <div className="mt-20 max-md:mt-0">

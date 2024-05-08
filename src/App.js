@@ -13,6 +13,7 @@ import Header from "./components/Header.js";
 import Footer from "./components/Footer/index.js";
 import MobileNavbar from "./components/Header.js/mobileNavbar";
 import Panel from "./components/panel";
+import SendCode from "./components/auth/sendCode";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
           <Route path="/blog" element={<ArchiveBlog />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sendcode" element={<SendCode />} />
           <Route path="/international-sell" element={<InternationalSell />} />
           <Route path="/basket" element={<Basket />} />
           <Route path="/panel" element={<Panel />} />

@@ -1,17 +1,18 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
+import { url } from "../../api/domain";
 
-const NotActiveShopItem = () => {
+const NotActiveShopItem = (image , title , slug) => {
     return(
-        <Link to={"/shop/123"}>
+        <Link to={"/shop/" + slug}>
             <div className={styles.shopItem + " border max-md:h-full border-black max-md:border-none max-md:flex max-md:items-center max-md:gap-5"}>
                 <div className={styles.image + " relative z-10 w-full overflow-hidden max-md:max-w-[120px] rounded-lg"}>
-                    <img className="object-cover w-full h-full" src="../../images/shopitemimage.png" alt="image" />
+                    <img className="object-cover w-full h-full" src={url + image} alt="image" />
                 </div>
                 <div className={styles.footer + " relative z-20 bg-[#8A8A8A] max-md:bg-transparent flex flex-col max-md:justify-between h-[70%] w-full p-3 border-b-4 border-b-[#8A8A8A]"} style={{direction : "ltr"}}>
                     <div>
-                        <p className="text-white text-xs mb-2 max-md:text-black">ميل لنگ هیوندای آزرا اصلی</p>
+                        <p className="text-white text-xs mb-2 max-md:text-black">{title}</p>
                     </div>
                     <div className="flex items-center justify-between">
                         <div className={styles.price + " flex items-center justify-between w-full"}>

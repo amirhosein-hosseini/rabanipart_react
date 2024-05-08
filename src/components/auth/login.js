@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { OutlineBlackButton, SecondPrimaryButton } from "../button";
+import axios from "axios";
+import { prefix, url } from "../../api/domain";
+import { setCookie } from "../../api/auth";
+import { useAuth } from "../../context/authContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
 
+
+    const {signIn} = useAuth();
+    const navigate = useNavigate();
     const [showPass , setShowPass] = useState("password");
-
-
+    const [showSendCode , setShowSendCode] = useState(false);
+    const [formData, setFormData] = useState({
+        password: "",
+        phone: "",
+    });
+    const [codeData , setCodeData] = useState({
+        code: ""
+    })
 
 
     const handleShowPassword = () => {
@@ -16,6 +30,100 @@ const Login = () => {
         }else if(showPass === "text"){
             setShowPass("password")
         }
+    }
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+    const handleCodeChange = (e) => {
+        const { name, value } = e.target;
+        setCodeData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+
+        axios.post(url + "/" + prefix + '/auth/login', formData)
+            .then((response) => {
+                signIn(response?.data?.token);
+                toast.success("به ربانی پارت خوش آمدید");
+            })
+            .catch((error) => {
+                // setError(error.response.data)
+                if(error.response.data.error === "not_active"){
+                    axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
+                    setShowSendCode(true)
+                }
+                console.log(error.response.data)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+
+    const handleCodeSubmit = (e) => {
+
+        e.preventDefault();
+
+
+        axios.post(url + "/" + prefix + '/auth/check-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
+            .then((response) => {
+                signIn(response?.data?.token);
+                toast.success("به ربانی پارت خوش آمدید");
+            })
+            .catch((error) => {
+                console.log(error.response.data)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+    if(showSendCode === true) {
+        return(
+            <div className={styles.login + " relative h-screen"}>
+                <div className={styles.back + " absolute top-5 left-5 z-50"}>
+                    <Link to={"/"}>
+                        <svg className="w-6 fill-white max-md:fill-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                    </Link>
+                </div>
+                <div className={styles.loginwrapper + " flex items-center h-full"}>
+                    <div className={styles.login__image + " w-1/2 max-md:hidden overflow-hidden h-full"}>
+                        <img className="object-cover w-full h-full" src="../../images/loginimage.png" alt="image" />
+                    </div>
+                    <div className={styles.form + " w-1/2 max-md:w-full flex justify-center items-center flex-col"}>
+                        <form className="w-1/2 max-md:w-11/12 m-x-auto flex justify-center items-center flex-col gap-4">
+                            <div className={styles.formgroup + " relative w-full"}>
+                                <input
+                                    type="text"
+                                    name="code"
+                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                    placeholder="کد ارسال شده را وارد کنید"
+                                    value={codeData.code}
+                                    onChange={handleCodeChange}
+                                />
+                            </div>
+                        </form>
+                        <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
+                            <div className="grid w-full" onClick={handleCodeSubmit}>
+                                <SecondPrimaryButton>
+                                    تایید
+                                </SecondPrimaryButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
 
@@ -36,9 +144,11 @@ const Login = () => {
                         <div className={styles.formgroup + " relative w-full"}>
                             <input
                                 type="text"
-                                name="email"
+                                name="phone"
                                 className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
                                 placeholder="شماره تلفن"
+                                value={formData.phone}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className={styles.formgroup + " relative w-full"}>
@@ -47,6 +157,8 @@ const Login = () => {
                                 name="password"
                                 className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
                                 placeholder="رمز"
+                                value={formData.password}
+                                onChange={handleChange}
                             />
                             <svg onClick={handleShowPassword} className="absolute left-3 top-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3E3E3E">
                                 <path d="M21.25 9.14999C18.94 5.51999 15.56 3.42999 12 3.42999C10.22 3.42999 8.49 3.94999 6.91 4.91999C5.33 5.89999 3.91 7.32999 2.75 9.14999C1.75 10.72 1.75 13.27 2.75 14.84C5.06 18.48 8.44 20.56 12 20.56C13.78 20.56 15.51 20.04 17.09 19.07C18.67 18.09 20.09 16.66 21.25 14.84C22.25 13.28 22.25 10.72 21.25 9.14999ZM12 16.04C9.76 16.04 7.96 14.23 7.96 12C7.96 9.76999 9.76 7.95999 12 7.95999C14.24 7.95999 16.04 9.76999 16.04 12C16.04 14.23 14.24 16.04 12 16.04Z" fill="black"/>
@@ -62,12 +174,10 @@ const Login = () => {
                         </Link>
                     </div>
                     <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
-                        <div className="grid w-full">
-                            <Link to={"/panel"}>
-                                <SecondPrimaryButton>
-                                    ورود
-                                </SecondPrimaryButton>
-                            </Link>
+                        <div className="grid w-full" onClick={handleSubmit}>
+                            <SecondPrimaryButton>
+                                ورود
+                            </SecondPrimaryButton>
                         </div>
                         <div className="grid w-full">
                             <Link to={"/signin"}>
