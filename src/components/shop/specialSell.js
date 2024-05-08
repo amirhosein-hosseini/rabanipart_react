@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import ActiveShopItem from "./activeShopItem";
 import Category from "../index/category";
 import Faq from "../faq";
+import { getAllCategories } from "../../api/home";
 
 const SepcialSell = () => {
+
+
+    const [categories , setCategories] = useState(null);
+
+    // function for get all categories data
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getAllCategories();
+            setCategories(data?.data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+
+
+
     return(
         <div className={styles.specialSell + " mt-40 mb-20 max-md:mt-20"}>
             <div className={styles.container + " container w-11/12 max-w-5xl mx-auto overflow-hidden"}>

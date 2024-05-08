@@ -29,7 +29,7 @@ const ActiveShopItem = ({image , price , title , slug}) => {
 
 
     return(
-        <Link to={"/shop/" + slug}>
+        <Link to={"/product/" + slug}>
             <div className={styles.shopItem + " border max-md:h-full border-black max-md:border-none max-md:flex max-md:items-center max-md:gap-5"}>
                 <div className={styles.image + " relative z-10 w-full overflow-hidden max-md:max-w-[120px] rounded-lg"}>
                     <img className="object-cover w-full h-full" src={url + image} alt="image" />

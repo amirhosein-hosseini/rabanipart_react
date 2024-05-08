@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EngineNumber from "./engineNumber";
 import PanelOrder from "./panelOrders";
 import PanelAdresses from "./panlAddresses";
 import styles from "./styles.module.scss";
+import { getUserInfo } from "../../api/user";
 
 const Panel = () => {
 
     const [level , setLevel] = useState("order");
+    const [userInfo , setUserInfo] = useState(null);
+
+
+    // get data for user information
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getUserInfo();
+            setUserInfo(data?.data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+    console.log(userInfo)
 
 
 

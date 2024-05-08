@@ -5,6 +5,7 @@ import NotActiveShopItem from "./notActiveShopItem";
 import Faq from "../faq";
 import { SpecialSaleBanner, WebsiteBanner } from "../banner";
 import { getAllProducts } from "../../api/shop";
+import { getAllCategories } from "../../api/home";
 
 const ShopArchive = () => {
 
@@ -12,6 +13,8 @@ const ShopArchive = () => {
     const [showMobileFilter , setShowMobileFilter] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [products , setProducts] = useState(null);
+    const [categories , setCategories] = useState(null);
+
 
     useEffect(() => {
       const handleResize = () => {
@@ -45,6 +48,23 @@ const ShopArchive = () => {
     
         fetchData();
     }, []);
+
+
+    // function for get all categories data
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getAllCategories();
+            setCategories(data?.data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+
 
     const parsToArray = (string) => {
         let actualArray = JSON.parse(string);

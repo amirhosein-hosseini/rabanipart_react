@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { createContext, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCookie , deleteCookie, setCookie } from '../api/auth';

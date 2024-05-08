@@ -120,3 +120,9 @@ input:checked + .slider:before {
   overflow: hidden;
   height: 100vh;
 }
+
+.Toastify__toast-body{
+    direction: rtl;
+    font-family: "Yekan Bakh";
+    font-size: 15px;
+}
