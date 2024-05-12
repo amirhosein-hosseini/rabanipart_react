@@ -126,3 +126,21 @@ input:checked + .slider:before {
     font-family: "Yekan Bakh";
     font-size: 15px;
 }
+
+.css-cp2j25-MuiSlider-thumb{
+  background: #E14957 !important;
+}
+.css-7o8aqz-MuiSlider-rail{
+  background: black !important;
+}
+.css-ttgsjq-MuiSlider-track{
+  background-color: black !important;
+  border: none !important;
+}
+.css-188mx6n-MuiSlider-root{
+  height: 2px !important;
+}
+.css-cp2j25-MuiSlider-thumb{
+  height: 15px !important;
+  width: 15px !important;
+}

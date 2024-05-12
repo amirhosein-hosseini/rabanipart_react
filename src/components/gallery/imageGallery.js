@@ -38,7 +38,6 @@ const MyImageGallery = ({data}) => {
     }
 }, [data, url]);
 
-console.log(typeof(data))
 
 
   console.log("data" , data)

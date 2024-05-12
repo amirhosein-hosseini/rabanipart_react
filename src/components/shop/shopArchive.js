@@ -4,8 +4,9 @@ import ActiveShopItem from "./activeShopItem";
 import NotActiveShopItem from "./notActiveShopItem";
 import Faq from "../faq";
 import { SpecialSaleBanner, WebsiteBanner } from "../banner";
-import { getAllProducts } from "../../api/shop";
+import { getAllBrands, getAllProducts } from "../../api/shop";
 import { getAllCategories } from "../../api/home";
+import PriceRangeSlider from "./priceRangeSlider";
 
 const ShopArchive = () => {
 
@@ -14,6 +15,13 @@ const ShopArchive = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [products , setProducts] = useState(null);
     const [categories , setCategories] = useState(null);
+    const [showFilterItems , setShowFilterItems] = useState(null);
+    const [brands , setBrands] = useState(null);
+    const [priceRange, setPriceRange] = useState([0, 100]); // Example initial price range
+
+    const handlePriceRangeChange = (newRange) => {
+      setPriceRange(newRange);
+    };
 
 
     useEffect(() => {
@@ -65,11 +73,39 @@ const ShopArchive = () => {
     }, []);
 
 
+    // function for get all brands data
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getAllBrands();
+            setBrands(data?.data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+
+
 
     const parsToArray = (string) => {
         let actualArray = JSON.parse(string);
         return actualArray
     }
+
+
+    // function for handle show filter items
+    const handleShowFilterItems = (item) => {
+
+        if(showFilterItems === item){
+            setShowFilterItems(null);
+        }else{
+            setShowFilterItems(item);
+        }
+
+    }   
 
 
 
@@ -171,30 +207,62 @@ const ShopArchive = () => {
                     <div className={styles.filters + " p-3 border border-[#E1E1E1] rounded-2xl flex flex-col gap-3"}>
                         <p className="font-bold">فیلتر ها</p>
                         <div className={styles.items}>
-                            <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
-                                <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                                </svg>
-                                <p className="text-sm">دسته بندی</p>
+                            <div className={styles.item + " py-4"}>
+                                <div className="flex items-center justify-between flex-row-reverse cursor-pointer" onClick={() => handleShowFilterItems("category")}>
+                                    <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                                    </svg>
+                                    <p className="text-sm">دسته بندی</p>
+                                </div>
+                                {showFilterItems === "category" ? 
+                                    <div className="items mt-3 flex flex-col gap-2">
+                                        {categories?.map((item) => (
+                                            <p className="text-sm cursor-pointer">
+                                                {item?.name}
+                                            </p>
+                                        ))}
+                                    </div> : ""
+                                }
+                            </div>
+                            <div className={styles.item + " py-4"}>
+                                <div className=" flex items-center justify-between flex-row-reverse cursor-pointer" onClick={() => handleShowFilterItems("brand")}>
+                                    <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                                    </svg>
+                                    <p className="text-sm">نام خودرو</p>
+                                </div>
+                                {showFilterItems === "brand" ? 
+                                    <div className="items mt-3 flex flex-col gap-2">
+                                        {brands?.map((item) => (
+                                            <p className="text-sm cursor-pointer">
+                                                {item?.name}
+                                            </p>
+                                        ))}
+                                    </div> : ""
+                                }
                             </div>
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
-                                <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                                </svg>
-                                <p className="text-sm">نام خودرو</p>
-                            </div>
-                            <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
-                                <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                                </svg>
+                                <label class="switch">
+                                    <input type="checkbox" />
+                                    <span class="slider round" />
+                                </label>
                                 <p className="text-sm">فروش ویژه</p>
                             </div>
-                            <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
-                                <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                                </svg>
-                                <p className="text-sm">نوع</p>
-                            </div>
+                            {/* <div className={styles.item + " py-4"}>
+                                <div className=" flex items-center justify-between flex-row-reverse cursor-pointer" onClick={() => handleShowFilterItems("type")}>
+                                    <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                                    </svg>
+                                    <p className="text-sm">نوع</p>
+                                </div>
+                                {showFilterItems === "type" ? 
+                                    <div className="items mt-3 flex flex-col gap-2">
+                                        <p className="text-sm cursor-pointer">
+                                            موتوری
+                                        </p>
+                                    </div> : ""
+                                }
+                            </div> */}
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <label class="switch">
                                     <input type="checkbox" />
@@ -209,18 +277,25 @@ const ShopArchive = () => {
                                 </label>
                                 <p className="text-sm">کالا های ربانی پارت</p>
                             </div>
-                            <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
-                                <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                                </svg>
-                                <p className="text-sm">محدوده قیمت</p>
+                            <div className={styles.item + " py-4"}>
+                                <div className="flex mb-3 cursor-pointer items-center justify-between  flex-row-reverse" onClick={() => handleShowFilterItems("price")}>
+                                    <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                                    </svg>
+                                    <p className="text-sm">محدوده قیمت</p>
+                                </div>
+                                {showFilterItems === "price" ? 
+                                    <div className="priceRange">
+                                        <PriceRangeSlider />
+                                    </div> : ""
+                                }
                             </div>
-                            <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
+                            {/* <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                                 </svg>
                                 <p className="text-sm">نوع فروشنده</p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -242,12 +317,9 @@ const ShopArchive = () => {
                     </p>
                 </div>
                 <div className={styles.items + " flex flex-col gap-3 mb-10"}>
-                    <p>دسته بندی1</p>
-                    <p>دسته بندی2</p>
-                    <p>دسته بندی3</p>
-                    <p>دسته بندی4</p>
-                    <p>دسته بندی5</p>
-                    <p>دسته بندی6</p>
+                    {categories?.map((item) => (
+                        <p className="cursor-pointer">{item?.name}</p>
+                    ))}
                 </div>
             </div>
 
@@ -262,24 +334,34 @@ const ShopArchive = () => {
                     </p>
                 </div>
                 <div className={styles.items + " flex flex-col gap-3 mb-10"}>
-                    <div className={styles.item + " flex items-center justify-between py-4"}>
-                        <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                        </svg>
-                        <p className="text-sm">نام خودرو</p>
+                    <div className={styles.item + " py-4"}>
+                        <div className="flex items-center justify-between" onClick={() => handleShowFilterItems("brand")}>
+                            <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                            </svg>
+                            <p className="text-sm">نام خودرو</p>
+                        </div>
+                        {showFilterItems === "brand" ? 
+                            <div className="items mt-3 flex flex-col gap-2">
+                                {brands?.map((item) => (
+                                    <p className="text-xs cursor-pointer">{item?.name}</p>
+                                ))}
+                            </div> : ""
+                        }
                     </div>
                     <div className={styles.item + " flex items-center justify-between py-4"}>
-                        <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                        </svg>
+                        <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider round" />
+                        </label>
                         <p className="text-sm">فروش ویژه</p>
                     </div>
-                    <div className={styles.item + " flex items-center justify-between py-4"}>
+                    {/* <div className={styles.item + " flex items-center justify-between py-4"}>
                         <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                         </svg>
                         <p className="text-sm">نوع</p>
-                    </div>
+                    </div> */}
                     <div className={styles.item + " flex items-center justify-between py-4"}>
                         <label class="switch">
                             <input type="checkbox" />
@@ -294,18 +376,25 @@ const ShopArchive = () => {
                         </label>
                         <p className="text-sm">کالا های ربانی پارت</p>
                     </div>
-                    <div className={styles.item + " flex items-center justify-between py-4"}>
-                        <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
-                        </svg>
-                        <p className="text-sm">محدوده قیمت</p>
+                    <div className={styles.item + " py-4"}>
+                        <div className="flex mb-3 cursor-pointer items-center justify-between" onClick={() => handleShowFilterItems("price")}>
+                            <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
+                            </svg>
+                            <p className="text-sm">محدوده قیمت</p>
+                        </div>
+                        {showFilterItems === "price" ? 
+                            <div className="priceRange">
+                                <PriceRangeSlider />
+                            </div> : ""
+                        }
                     </div>
-                    <div className={styles.item + " flex items-center justify-between py-4"}>
+                    {/* <div className={styles.item + " flex items-center justify-between py-4"}>
                         <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                         </svg>
                         <p className="text-sm">نوع فروشنده</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
