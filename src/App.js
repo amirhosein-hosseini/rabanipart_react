@@ -36,7 +36,7 @@ function App() {
           <Route path="/shop" element={<ShopArchive />} />
           <Route path="/special/:slug" element={<SepcialSell />} />
           <Route path="/product/:slug" element={<SingleShop />} />
-          <Route path="/shop/:slug" element={<ShopArchive />} />
+          <Route path="/category/:cat" element={<ShopArchive />} />
           <Route path="/blog" element={<ArchiveBlog />} />
           <Route path="/blog/:slug" element={<SingleBlog />} />
           <Route path="/signin" element={<Signin />} />

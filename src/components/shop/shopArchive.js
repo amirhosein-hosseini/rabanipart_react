@@ -7,9 +7,11 @@ import { SpecialSaleBanner, WebsiteBanner } from "../banner";
 import { getAllBrands, getAllProducts } from "../../api/shop";
 import { getAllCategories } from "../../api/home";
 import PriceRangeSlider from "./priceRangeSlider";
+import { useParams } from "react-router-dom";
 
 const ShopArchive = () => {
 
+    const params = useParams()
     const [showMobileCategory , setShowMobileCategory] = useState(false);
     const [showMobileFilter , setShowMobileFilter] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -18,11 +20,37 @@ const ShopArchive = () => {
     const [showFilterItems , setShowFilterItems] = useState(null);
     const [brands , setBrands] = useState(null);
     const [priceRange, setPriceRange] = useState([0, 100]); // Example initial price range
+    const [filter , setFilter] = useState({
+        "off" : false,
+        "original" : false,
+        "used" : null,
+        "showcase" : null,
+        "suggest" : "",
+        "exists" : "",
+        "cat": "",
+        "brand" : "",
+        "lowest_price" : null,
+        "highest_price" : null,
+        "vip_exists" : "",
+    });
+
 
     const handlePriceRangeChange = (newRange) => {
       setPriceRange(newRange);
     };
 
+    useEffect(() => {
+        if(params?.cat !== undefined){
+            setFilter((prevFilterData) => ({
+                ...prevFilterData,
+                ["cat"]: params?.cat,
+            }))
+        }
+    } , [])
+
+
+
+    console.log(params.cat)
 
     useEffect(() => {
       const handleResize = () => {
@@ -47,7 +75,7 @@ const ShopArchive = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const data = await getAllProducts();
+            const data = await getAllProducts(filter);
             setProducts(data?.data?.data);
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -55,7 +83,9 @@ const ShopArchive = () => {
         };
     
         fetchData();
-    }, []);
+    }, [filter]);
+
+
 
 
     // function for get all categories data
@@ -107,6 +137,43 @@ const ShopArchive = () => {
 
     }   
 
+
+    // function for handle category change
+    const handleCategorySort = (place , value) => {
+        setFilter((prevFilterData) => ({
+          ...prevFilterData,
+          [place]: value,
+        }))
+    }
+
+    // function for handle brand change
+    const handleBrandSort = (place , value) => {
+        setFilter((prevFilterData) => ({
+          ...prevFilterData,
+          [place]: value,
+        }))
+    }
+
+    // function for handle suggest change
+    const handleSuggestkboxChange = (event) => {
+        const isChecked = event.target.checked;
+        const newFilter = { ...filter, suggest: isChecked ? "1" : "" };
+        setFilter(newFilter);
+    };
+
+    // function for handle exists change
+    const handleExstsboxChange = (event) => {
+        const isChecked = event.target.checked;
+        const newFilter = { ...filter, exists: isChecked ? "1" : "" };
+        setFilter(newFilter);
+    };
+
+    // function for handle vis_exists change
+    const handleVipExstsboxChange = (event) => {
+        const isChecked = event.target.checked;
+        const newFilter = { ...filter, vip_exists: isChecked ? "1" : "" };
+        setFilter(newFilter);
+    };
 
 
     return(
@@ -217,7 +284,7 @@ const ShopArchive = () => {
                                 {showFilterItems === "category" ? 
                                     <div className="items mt-3 flex flex-col gap-2">
                                         {categories?.map((item) => (
-                                            <p className="text-sm cursor-pointer">
+                                            <p className="text-sm cursor-pointer" onClick={() => handleCategorySort("cat" , item?.id)}>
                                                 {item?.name}
                                             </p>
                                         ))}
@@ -234,7 +301,7 @@ const ShopArchive = () => {
                                 {showFilterItems === "brand" ? 
                                     <div className="items mt-3 flex flex-col gap-2">
                                         {brands?.map((item) => (
-                                            <p className="text-sm cursor-pointer">
+                                            <p className="text-sm cursor-pointer" onClick={() => handleBrandSort("brand" , item?.id)}>
                                                 {item?.name}
                                             </p>
                                         ))}
@@ -243,7 +310,7 @@ const ShopArchive = () => {
                             </div>
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <label class="switch">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" checked={filter.suggest === "1"} onChange={handleSuggestkboxChange} />
                                     <span class="slider round" />
                                 </label>
                                 <p className="text-sm">فروش ویژه</p>
@@ -265,14 +332,14 @@ const ShopArchive = () => {
                             </div> */}
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <label class="switch">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" checked={filter.exists === "1"} onChange={handleExstsboxChange} />
                                     <span class="slider round" />
                                 </label>
                                 <p className="text-sm">کالاهای موجود</p>
                             </div>
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <label class="switch">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" checked={filter.vip_exists === "1"} onChange={handleVipExstsboxChange} />
                                     <span class="slider round" />
                                 </label>
                                 <p className="text-sm">کالا های ربانی پارت</p>

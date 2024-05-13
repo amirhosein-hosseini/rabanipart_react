@@ -10,23 +10,23 @@ export const AuthProvider = ({ children }) => {
   const token = getCookie('token');
   const rtoken = getCookie('rtoken');
 
-//   const signOut = () => {
-//     axios.post(domain + 'api/accounts/logout/' , {"refresh_token": rtoken} , {
-//       headers : {
-//           'Authorization' : 'Bearer ' + token,
-//       }
-//     })
-//       .then((response) => {
-//           console.log(response.data.message);
-//           deleteCookie('token');
-//           deleteCookie("rtoken")
-//           setIsLoggedIn(false);
-//           navigate('/signin')
-//       })
-//       .catch((error) => {
-//           console.log(error?.response?.data?.message);
-//       });
-//   };
+  // const signOut = () => {
+  //   axios.post(domain + 'api/accounts/logout/' , {"refresh_token": rtoken} , {
+  //     headers : {
+  //         'Authorization' : 'Bearer ' + token,
+  //     }
+  //   })
+  //     .then((response) => {
+  //         console.log(response.data.message);
+  //         deleteCookie('token');
+  //         deleteCookie("rtoken")
+  //         setIsLoggedIn(false);
+  //         navigate('/signin')
+  //     })
+  //     .catch((error) => {
+  //         console.log(error?.response?.data?.message);
+  //     });
+  // };
 
 
   const signIn = (token) => {

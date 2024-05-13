@@ -5,9 +5,9 @@ import { prefix } from "./domain";
 
 
 
-export const getAllProducts = async () => {
+export const getAllProducts = async (filter) => {
     try {
-        const response = await axios.get(url + "/" + prefix + "/product/all?off=0&original&used&showcase&suggest&exists&vip_exists&cat&brand&lowest_price&highest_price");
+        const response = await axios.get(url + "/" + prefix + "/product/all?off=0&original&used&showcase&suggest=" + filter?.suggest + "&exists=" + filter?.exists + "&vip_exists=" + filter?.vip_exists + "&cat=" + filter?.cat + "&brand=" + filter?.brand + "&lowest_price&highest_price");
         
 
         if (response.status === 200) {

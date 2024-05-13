@@ -17,7 +17,7 @@ const Panel = () => {
         const fetchData = async () => {
           try {
             const data = await getUserInfo();
-            setUserInfo(data?.data?.data);
+            setUserInfo(data?.data?.user);
           } catch (error) {
             console.error("Error fetching data:", error);
           }
@@ -26,7 +26,6 @@ const Panel = () => {
         fetchData();
     }, []);
 
-    console.log(userInfo)
 
 
 
@@ -44,10 +43,10 @@ const Panel = () => {
                                     <path d="M14.4349 12.469C13.2898 11.3797 11.7332 10.7114 9.90492 10.7114C6.20992 10.7114 3.62476 13.4409 3.30342 16.8591C3.2876 17.0274 3.34343 17.1945 3.45721 17.3195C3.57098 17.4444 3.73216 17.5157 3.90116 17.5157H11.6661L11.0257 17.0354C10.2299 16.4385 10.0687 15.3096 10.6655 14.5138C11.2623 13.718 12.3913 13.5567 13.1871 14.1536L13.3505 14.2762L14.4349 12.469Z" fill="black"/>
                                     <path d="M17.0239 12.8214C17.1945 12.5371 17.1023 12.1683 16.818 11.9977C16.5337 11.8271 16.1649 11.9193 15.9943 12.2036L13.6951 16.0356L12.4666 15.1142C12.2013 14.9152 11.825 14.969 11.626 15.2342C11.4271 15.4995 11.4808 15.8758 11.7461 16.0748L13.5072 17.3956C13.6432 17.4976 13.816 17.5372 13.9828 17.5045C14.1497 17.4718 14.2948 17.3699 14.3823 17.2242L17.0239 12.8214Z" fill="black"/>
                                 </svg>
-                                <p className="text-[#EB0E23] font-bold">محمد پیله چی</p>
+                                <p className="text-[#EB0E23] font-bold">{userInfo?.name}</p>
                             </div>
                             <div>
-                                <p className="text-xs mt-3">شماره تماس : <span>۰۹۱۰۲۲۲۲۲۲۲</span></p>
+                                <p className="text-xs mt-3">شماره تماس : <span>{userInfo?.number}</span></p>
                             </div>
                         </div>
                         <div>
