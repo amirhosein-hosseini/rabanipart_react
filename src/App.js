@@ -15,6 +15,7 @@ import MobileNavbar from "./components/Header.js/mobileNavbar";
 import Panel from "./components/panel";
 import SendCode from "./components/auth/sendCode";
 import SingleBlog from "./components/blog/singleBlog.js";
+import ShopSearch from "./components/shop/shopSearch";
 
 function App() {
   const location = useLocation();
@@ -33,8 +34,10 @@ function App() {
         
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopArchive />} />
+          <Route path="/shop/" element={<ShopArchive />} />
+          <Route path="/shop/:params" element={<ShopArchive />} />
           <Route path="/special/:slug" element={<SepcialSell />} />
+          <Route path="/search/:slug" element={<ShopSearch />} />
           <Route path="/product/:slug" element={<SingleShop />} />
           <Route path="/category/:cat" element={<ShopArchive />} />
           <Route path="/blog" element={<ArchiveBlog />} />

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { getCookie , deleteCookie, setCookie } from '../api/auth';
 
 const AuthContext = createContext();
@@ -10,23 +11,12 @@ export const AuthProvider = ({ children }) => {
   const token = getCookie('token');
   const rtoken = getCookie('rtoken');
 
-  // const signOut = () => {
-  //   axios.post(domain + 'api/accounts/logout/' , {"refresh_token": rtoken} , {
-  //     headers : {
-  //         'Authorization' : 'Bearer ' + token,
-  //     }
-  //   })
-  //     .then((response) => {
-  //         console.log(response.data.message);
-  //         deleteCookie('token');
-  //         deleteCookie("rtoken")
-  //         setIsLoggedIn(false);
-  //         navigate('/signin')
-  //     })
-  //     .catch((error) => {
-  //         console.log(error?.response?.data?.message);
-  //     });
-  // };
+  const signOut = () => {
+    deleteCookie('token');
+    setIsLoggedIn(false)
+    navigate('/login')
+    toast.success("با موفقیت خارج شدید")
+  };
 
 
   const signIn = (token) => {
@@ -38,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, signIn}}>
+    <AuthContext.Provider value={{ isLoggedIn, signIn , signOut}}>
       {children}
     </AuthContext.Provider>
   );

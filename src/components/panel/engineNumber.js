@@ -1,7 +1,97 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getCookie } from "../../api/auth";
+import { prefix, url } from "../../api/domain";
+import { getUserChassis } from "../../api/user";
 import styles from "./styles.module.scss";
 
 const EngineNumber = () => {
+
+
+    const token = getCookie('token')
+    const [showInput , setShowInput] = useState(false);
+    const [chassis , setChassis] = useState(null);
+    const [reload , setReload] = useState(1);
+    const [activeChassi , setActiveChassi] = useState(null);
+    const [formData, setFormData] = useState({
+        name: "",
+        number: "",
+    });
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+    
+    // get data for user chassis
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getUserChassis();
+            setChassis(data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, [reload]);
+
+
+
+
+
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+
+        axios.post(url + "/" + prefix + '/user/chassis/create', formData , {
+            headers : {
+                'Authorization' : 'Bearer ' + token,
+            }
+        })
+            .then((response) => {
+                toast.success(response.data?.message);
+                setReload(reload + 1);
+                setShowInput(false);
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+    const handleDelete = (id) => {
+
+
+        axios.delete(url + "/" + prefix + '/user/chassis/deleteChassi/' + id,  {
+            headers : {
+                'Authorization' : 'Bearer ' + token,
+            }
+        })
+            .then((response) => {
+                toast.success(response.data?.message);
+                setReload(reload + 1);
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+
     return(
         <div className={styles.panelOrder + " px-5 py-12 max-md:py-5"}>
             <div className={styles.header + " flex flex-row-reverse items-center gap-2 mb-10"}>
@@ -11,47 +101,61 @@ const EngineNumber = () => {
                 <p>شماره های شاسی</p>
             </div>
             <div className={styles.items + " min-h-[335px] flex flex-col gap-3"}>
-                <div className={styles.item + " flex flex-row-reverse gap-10 items-center"}>
-                    <div className="flex items-center flex-row-reverse gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M11.0002 4.75C11.0002 6.82107 9.32122 8.5 7.25015 8.5C6.73356 8.5 6.24137 8.39554 5.79355 8.2066L3.50015 10.5C2.94787 11.0523 2.05244 11.0523 1.50015 10.5C0.947867 9.94771 0.947866 9.05229 1.50015 8.5L3.79355 6.2066C3.60461 5.75878 3.50015 5.26659 3.50015 4.75C3.50015 2.67893 5.17908 1 7.25015 1C7.66316 1 8.06058 1.06677 8.4322 1.1901C8.74896 1.29523 8.80765 1.6925 8.57165 1.9285L7.00015 3.5C6.58594 3.91421 6.58594 4.58579 7.00015 5C7.41436 5.41421 8.08594 5.41421 8.50015 5L10.0717 3.4285C10.3077 3.1925 10.7049 3.25119 10.8101 3.56795C10.9334 3.93957 11.0002 4.33699 11.0002 4.75Z" fill="#EB0E23"/>
-                        </svg>
-                        <p className="text-[#656565]">34fgg4567</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <rect x="0.32" y="0.32" width="13.36" height="13.36" fill="#F61C1C" stroke="black" stroke-width="0.64"/>
-                    </svg>
-                    <div className="flex items-center gap-2 flex-row-reverse">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M2.66216 11.25L2.24748 11.2768C2.26159 11.4954 2.44305 11.6655 2.66216 11.6655V11.25ZM9.58784 11.25V11.6655C9.80695 11.6655 9.98841 11.4954 10.0025 11.2768L9.58784 11.25ZM1 2.24662C0.770503 2.24662 0.584459 2.43267 0.584459 2.66216C0.584459 2.89166 0.770503 3.0777 1 3.0777V2.24662ZM11.25 3.0777C11.4795 3.0777 11.6655 2.89166 11.6655 2.66216C11.6655 2.43267 11.4795 2.24662 11.25 2.24662V3.0777ZM5.29392 5.43243C5.29392 5.20294 5.10788 5.01689 4.87838 5.01689C4.64888 5.01689 4.46284 5.20294 4.46284 5.43243H5.29392ZM4.46284 8.47973C4.46284 8.70923 4.64888 8.89527 4.87838 8.89527C5.10788 8.89527 5.29392 8.70923 5.29392 8.47973H4.46284ZM7.78716 5.43243C7.78716 5.20294 7.60112 5.01689 7.37162 5.01689C7.14213 5.01689 6.95608 5.20294 6.95608 5.43243H7.78716ZM6.95608 8.47973C6.95608 8.70923 7.14213 8.89527 7.37162 8.89527C7.60112 8.89527 7.78716 8.70923 7.78716 8.47973H6.95608ZM7.86898 2.76574C7.92619 2.98799 8.15273 3.12179 8.37498 3.06459C8.59724 3.00738 8.73104 2.78084 8.67383 2.55859L7.86898 2.76574ZM1.69343 2.68892L2.24748 11.2768L3.07684 11.2232L2.52279 2.63541L1.69343 2.68892ZM2.66216 11.6655H9.58784V10.8345H2.66216V11.6655ZM10.0025 11.2768L10.5566 2.68892L9.72721 2.63541L9.17316 11.2232L10.0025 11.2768ZM10.1419 2.24662H2.10811V3.0777H10.1419V2.24662ZM1 3.0777H2.10811V2.24662H1V3.0777ZM10.1419 3.0777H11.25V2.24662H10.1419V3.0777ZM4.46284 5.43243V8.47973H5.29392V5.43243H4.46284ZM6.95608 5.43243V8.47973H7.78716V5.43243H6.95608ZM6.12501 1.41554C6.96348 1.41554 7.66906 1.98901 7.86898 2.76574L8.67383 2.55859C8.3817 1.42358 7.35187 0.584459 6.12501 0.584459V1.41554ZM4.38104 2.76574C4.58096 1.98901 5.28654 1.41554 6.12501 1.41554V0.584459C4.89815 0.584459 3.86832 1.42358 3.57619 2.55859L4.38104 2.76574Z" fill="#707070"/>
-                        </svg>
-                        <p className="text-[10px] text-[#656565]">حذف شماره شاسی</p>
-                    </div>
-                </div>
-                <div className={styles.item + " flex flex-row-reverse gap-10 items-center"}>
-                    <div className="flex items-center flex-row-reverse gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M11.0002 4.75C11.0002 6.82107 9.32122 8.5 7.25015 8.5C6.73356 8.5 6.24137 8.39554 5.79355 8.2066L3.50015 10.5C2.94787 11.0523 2.05244 11.0523 1.50015 10.5C0.947867 9.94771 0.947866 9.05229 1.50015 8.5L3.79355 6.2066C3.60461 5.75878 3.50015 5.26659 3.50015 4.75C3.50015 2.67893 5.17908 1 7.25015 1C7.66316 1 8.06058 1.06677 8.4322 1.1901C8.74896 1.29523 8.80765 1.6925 8.57165 1.9285L7.00015 3.5C6.58594 3.91421 6.58594 4.58579 7.00015 5C7.41436 5.41421 8.08594 5.41421 8.50015 5L10.0717 3.4285C10.3077 3.1925 10.7049 3.25119 10.8101 3.56795C10.9334 3.93957 11.0002 4.33699 11.0002 4.75Z" fill="#EB0E23"/>
-                        </svg>
-                        <p className="text-[#656565]">34fgg4567</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <rect x="0.32" y="0.32" width="13.36" height="13.36" stroke="black" stroke-width="0.64"/>
-                    </svg>
-                    <div className="flex items-center gap-2 flex-row-reverse">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M2.66216 11.25L2.24748 11.2768C2.26159 11.4954 2.44305 11.6655 2.66216 11.6655V11.25ZM9.58784 11.25V11.6655C9.80695 11.6655 9.98841 11.4954 10.0025 11.2768L9.58784 11.25ZM1 2.24662C0.770503 2.24662 0.584459 2.43267 0.584459 2.66216C0.584459 2.89166 0.770503 3.0777 1 3.0777V2.24662ZM11.25 3.0777C11.4795 3.0777 11.6655 2.89166 11.6655 2.66216C11.6655 2.43267 11.4795 2.24662 11.25 2.24662V3.0777ZM5.29392 5.43243C5.29392 5.20294 5.10788 5.01689 4.87838 5.01689C4.64888 5.01689 4.46284 5.20294 4.46284 5.43243H5.29392ZM4.46284 8.47973C4.46284 8.70923 4.64888 8.89527 4.87838 8.89527C5.10788 8.89527 5.29392 8.70923 5.29392 8.47973H4.46284ZM7.78716 5.43243C7.78716 5.20294 7.60112 5.01689 7.37162 5.01689C7.14213 5.01689 6.95608 5.20294 6.95608 5.43243H7.78716ZM6.95608 8.47973C6.95608 8.70923 7.14213 8.89527 7.37162 8.89527C7.60112 8.89527 7.78716 8.70923 7.78716 8.47973H6.95608ZM7.86898 2.76574C7.92619 2.98799 8.15273 3.12179 8.37498 3.06459C8.59724 3.00738 8.73104 2.78084 8.67383 2.55859L7.86898 2.76574ZM1.69343 2.68892L2.24748 11.2768L3.07684 11.2232L2.52279 2.63541L1.69343 2.68892ZM2.66216 11.6655H9.58784V10.8345H2.66216V11.6655ZM10.0025 11.2768L10.5566 2.68892L9.72721 2.63541L9.17316 11.2232L10.0025 11.2768ZM10.1419 2.24662H2.10811V3.0777H10.1419V2.24662ZM1 3.0777H2.10811V2.24662H1V3.0777ZM10.1419 3.0777H11.25V2.24662H10.1419V3.0777ZM4.46284 5.43243V8.47973H5.29392V5.43243H4.46284ZM6.95608 5.43243V8.47973H7.78716V5.43243H6.95608ZM6.12501 1.41554C6.96348 1.41554 7.66906 1.98901 7.86898 2.76574L8.67383 2.55859C8.3817 1.42358 7.35187 0.584459 6.12501 0.584459V1.41554ZM4.38104 2.76574C4.58096 1.98901 5.28654 1.41554 6.12501 1.41554V0.584459C4.89815 0.584459 3.86832 1.42358 3.57619 2.55859L4.38104 2.76574Z" fill="#707070"/>
-                        </svg>
-                        <p className="text-[10px] text-[#656565]">حذف شماره شاسی</p>
-                    </div>
-                </div>
-                <div className={styles.addNew + " flex justify-end mt-12"}>
-                    <div className={styles.button}>
-                        <button className="text-[#FF3333] text-sm px-3 py-1 rounded-lg">
-                            ثبت شاسی جدید 
-                        </button>
-                    </div>
-                </div>
+                {chassis?.map((item) => (
+                    <div className={styles.item + " flex flex-row-reverse gap-10 items-center"}>
+                        <div className="flex items-center flex-row-reverse gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M11.0002 4.75C11.0002 6.82107 9.32122 8.5 7.25015 8.5C6.73356 8.5 6.24137 8.39554 5.79355 8.2066L3.50015 10.5C2.94787 11.0523 2.05244 11.0523 1.50015 10.5C0.947867 9.94771 0.947866 9.05229 1.50015 8.5L3.79355 6.2066C3.60461 5.75878 3.50015 5.26659 3.50015 4.75C3.50015 2.67893 5.17908 1 7.25015 1C7.66316 1 8.06058 1.06677 8.4322 1.1901C8.74896 1.29523 8.80765 1.6925 8.57165 1.9285L7.00015 3.5C6.58594 3.91421 6.58594 4.58579 7.00015 5C7.41436 5.41421 8.08594 5.41421 8.50015 5L10.0717 3.4285C10.3077 3.1925 10.7049 3.25119 10.8101 3.56795C10.9334 3.93957 11.0002 4.33699 11.0002 4.75Z" fill="#EB0E23"/>
+                            </svg>
+                            <p className="text-[#656565]">{item?.number}</p>
+                            <p className="text-[#656565]">{item?.name}</p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-row-reverse cursor-pointer" onClick={() => handleDelete(item?.id)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M2.66216 11.25L2.24748 11.2768C2.26159 11.4954 2.44305 11.6655 2.66216 11.6655V11.25ZM9.58784 11.25V11.6655C9.80695 11.6655 9.98841 11.4954 10.0025 11.2768L9.58784 11.25ZM1 2.24662C0.770503 2.24662 0.584459 2.43267 0.584459 2.66216C0.584459 2.89166 0.770503 3.0777 1 3.0777V2.24662ZM11.25 3.0777C11.4795 3.0777 11.6655 2.89166 11.6655 2.66216C11.6655 2.43267 11.4795 2.24662 11.25 2.24662V3.0777ZM5.29392 5.43243C5.29392 5.20294 5.10788 5.01689 4.87838 5.01689C4.64888 5.01689 4.46284 5.20294 4.46284 5.43243H5.29392ZM4.46284 8.47973C4.46284 8.70923 4.64888 8.89527 4.87838 8.89527C5.10788 8.89527 5.29392 8.70923 5.29392 8.47973H4.46284ZM7.78716 5.43243C7.78716 5.20294 7.60112 5.01689 7.37162 5.01689C7.14213 5.01689 6.95608 5.20294 6.95608 5.43243H7.78716ZM6.95608 8.47973C6.95608 8.70923 7.14213 8.89527 7.37162 8.89527C7.60112 8.89527 7.78716 8.70923 7.78716 8.47973H6.95608ZM7.86898 2.76574C7.92619 2.98799 8.15273 3.12179 8.37498 3.06459C8.59724 3.00738 8.73104 2.78084 8.67383 2.55859L7.86898 2.76574ZM1.69343 2.68892L2.24748 11.2768L3.07684 11.2232L2.52279 2.63541L1.69343 2.68892ZM2.66216 11.6655H9.58784V10.8345H2.66216V11.6655ZM10.0025 11.2768L10.5566 2.68892L9.72721 2.63541L9.17316 11.2232L10.0025 11.2768ZM10.1419 2.24662H2.10811V3.0777H10.1419V2.24662ZM1 3.0777H2.10811V2.24662H1V3.0777ZM10.1419 3.0777H11.25V2.24662H10.1419V3.0777ZM4.46284 5.43243V8.47973H5.29392V5.43243H4.46284ZM6.95608 5.43243V8.47973H7.78716V5.43243H6.95608ZM6.12501 1.41554C6.96348 1.41554 7.66906 1.98901 7.86898 2.76574L8.67383 2.55859C8.3817 1.42358 7.35187 0.584459 6.12501 0.584459V1.41554ZM4.38104 2.76574C4.58096 1.98901 5.28654 1.41554 6.12501 1.41554V0.584459C4.89815 0.584459 3.86832 1.42358 3.57619 2.55859L4.38104 2.76574Z" fill="#707070"/>
+                            </svg>
+                            <p className="text-[10px] text-[#656565]">حذف شماره شاسی</p>
+                        </div>
+                    </div> 
+                ))}
+                {showInput === false ? 
+                    <div className={styles.addNew + " flex justify-end mt-12"}>
+                        <div className={styles.button}>
+                            <button className="text-[#FF3333] text-sm px-3 py-1 rounded-lg" onClick={() => setShowInput(!showInput)}>
+                                ثبت شاسی جدید 
+                            </button>
+                        </div>
+                    </div> : ""
+                }
+                {showInput === true ? 
+                    <div className={styles.chassisInput + " mt-12"}>
+                        <form className="w-full m-x-auto flex justify-center items-center flex-col gap-4">
+                            <div className={styles.formgroup + " relative w-full flex gap-2 max-md:flex-col"}>
+                                <input
+                                    type="text"
+                                    name="number"
+                                    className="border rounded-lg border-[#FF3333] placeholder-opacity-25 w-full py-3 px-5 text-xs tracking-widest"
+                                    placeholder="شماره شاسی را وارد کنید"
+                                    value={formData.number}
+                                    onChange={handleChange}
+                                />
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="border rounded-lg border-[#FF3333] placeholder-opacity-25 w-full py-3 px-5 text-xs tracking-widest"
+                                    placeholder="نام خودرو"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className={styles.button}>
+                                <button className="text-[#FF3333] text-sm px-3 py-1 rounded-lg" onClick={handleSubmit}>
+                                    ثبت 
+                                </button>
+                            </div>
+                        </form>
+                    </div> : ""
+                }
             </div>
         </div>
     )

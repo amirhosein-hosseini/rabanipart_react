@@ -68,7 +68,7 @@ const Header = ({background}) => {
                             <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/"}>خانه</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/shop"}>فروشگاه</Link>
+                            <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/shop/"}>فروشگاه</Link>
                         </li>
                         <li>
                             <Link className="text-white text-sm duration-300 hover:text-[#FF0000]" to={"/blog"}>بلاگ</Link>

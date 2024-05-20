@@ -40,8 +40,6 @@ const MyImageGallery = ({data}) => {
 
 
 
-  console.log("data" , data)
-  console.log("images:" , images)
 
     return(
         <div>

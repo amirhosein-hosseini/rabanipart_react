@@ -5,9 +5,11 @@ import PanelOrder from "./panelOrders";
 import PanelAdresses from "./panlAddresses";
 import styles from "./styles.module.scss";
 import { getUserInfo } from "../../api/user";
+import { useAuth } from "../../context/authContext";
 
 const Panel = () => {
 
+    const {signOut} = useAuth();
     const [level , setLevel] = useState("order");
     const [userInfo , setUserInfo] = useState(null);
 
@@ -27,6 +29,10 @@ const Panel = () => {
     }, []);
 
 
+
+    const handleSignOut = () => {
+        signOut();
+    }
 
 
 
@@ -93,13 +99,11 @@ const Panel = () => {
                             <p className={`${level === "engine" ? "font-bold" : ""} max-md:text-xs`}>شماره شاسی</p>
                         </div>  
                     </div>
-                    <div className={styles.exit + " flex flex-row-reverse items-center gap-2 mt-20 max-md:mt-10"}>
+                    <div className={styles.exit + " flex flex-row-reverse cursor-pointer items-center gap-2 mt-20 max-md:mt-10"} onClick={handleSignOut}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
                             <path d="M18.6705 11.8123L8.46416 11.8123M18.6705 11.8123L14.588 15.8949M18.6705 11.8123L14.588 7.72977M10.5054 19.297H4.60841C4.10735 19.297 3.70117 18.8908 3.70117 18.3898L3.70117 5.23487C3.70117 4.73382 4.10736 4.32764 4.60841 4.32764L10.5054 4.32764" stroke="black" stroke-width="1.9212" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <Link to={"/"}>
-                            <p className="max-md:text-xs">خروج</p>
-                        </Link>
+                        <p className="max-md:text-xs">خروج</p>
                     </div>
                 </div>
                 <div className={styles.panelDetail + " w-2/3 max-md:w-full"}>

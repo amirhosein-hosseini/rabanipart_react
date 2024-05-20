@@ -1,46 +1,131 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
-import { RedPrimaryButton } from "../button";
+import { DeRedPrimaryButton, RedPrimaryButton, SecondPrimaryButton } from "../button";
 import ActiveShopItem from "./activeShopItem";
 import Faq from "../faq";
 import MyImageGallery from "../gallery/imageGallery";
 import { SpecialSaleBanner } from "../banner";
-import CartPopUp from "./cartPopUp";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { showProduct } from "../../api/shop";
+import { getUserChassis } from "../../api/user";
+import axios from "axios";
+import { prefix, url } from "../../api/domain";
+import { getCookie } from "../../api/auth";
+import { toast } from "react-toastify";
 
 
 const SingleShop = () => {
 
 
+    const token = getCookie('token');
     const params = useParams();
-    const [showPopUp , setShowPopUp] = useState(false);
+    const [display , setDisplay] = useState(false);
     const [data , setData] = useState(null);
+    const [chassis , setChassis] = useState(null);
     const propUpRef = useRef(null);
+    const [reload , setReload] = useState(1);
+    const [activeChassi , setActiveChassi] = useState(null);
+    const [formData, setFormData] = useState({
+        name: "",
+        number: "",
+    });
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+
+        axios.post(url + "/" + prefix + '/user/chassis/create', formData , {
+            headers : {
+                'Authorization' : 'Bearer ' + token,
+            }
+        })
+            .then((response) => {
+                toast.success(response.data?.message);
+                setReload(reload + 1);
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+    const handleAddToCart = (e) => {
+
+        e.preventDefault();
+
+
+        axios.post(url + "/" + prefix + '/cart/add', {postID : data?.product?.id , guarantee : data?.product?.guarantee[0]?.id , chassi_id : activeChassi} , {
+            headers : {
+                'Authorization' : 'Bearer ' + token,
+            }
+        })
+            .then((response) => {
+                toast.success(response.data?.message);
+                setDisplay(false)
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.message)
+            })
+            .finally(() => {
+                console.log("final")
+            });
+    };
+
+
+
+
+    // get data for user chassis
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getUserChassis();
+            setChassis(data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, [reload]);
+
 
 
 
     const addToCart = () => {
-        setShowPopUp(true)
+        setDisplay(true)
     }
 
 
     // funcotion for handeling show popup
     useEffect(() => {
-        if (showPopUp) {
+        if (display) {
             // Disable scrolling
             document.body.classList.add("noScroll");
         } else {
             // Enable scrolling
             document.body.classList.remove("noScroll");
         }
-    }, [showPopUp]);
+    }, [display]);
 
 
     // Function to handle the click event outside of the popup
     const handleClickOutside = (event) => {
         if (propUpRef.current && !propUpRef.current.contains(event.target)) {
-            setShowPopUp(false);
+            setDisplay(false);
         }
     };
 
@@ -54,17 +139,6 @@ const SingleShop = () => {
         };
     }, []);
 
-
-    // funcotion for handeling show popup
-    useEffect(() => {
-        if (showPopUp) {
-            // Disable scrolling
-            document.body.classList.add("noScroll");
-        } else {
-            // Enable scrolling
-            document.body.classList.remove("noScroll");
-        }
-    }, [showPopUp]);
 
 
 
@@ -82,11 +156,6 @@ const SingleShop = () => {
         fetchData();
     }, []);
 
-
-    data?.guarantee?.map((item)=> {
-        console.log(item)
-    })
-
     const parsToArray = (string) => {
         let actualArray = JSON.parse(string);
         return actualArray
@@ -96,16 +165,106 @@ const SingleShop = () => {
 
     return(
         <>
-            <div className={styles.singleShop + " relative mb-20 mt-20 max-md:mt-20"}>
+            <div className={styles.singleShop + " relative mb-20 mt-20 max-md:pt-5 max-md:mt-0"}>
 
-                {showPopUp === true? 
-                    <div onClick={() => setShowPopUp(false)}>
-                        <CartPopUp />
-                    </div>
-                    : ""
+                
+                {display === true ?
+                    <div className={styles.cartPopUp + ` absolute top-0 left-0 w-full h-full z-50 ${display === true ? "flex" : "hidden"} items-start pt-[150px] max-md:pt-[30px] justify-center`}>
+                        <div className={styles.container + " rounded-lg overflow-hidden w-5/12 max-md:w-11/12 bg-white"}>
+                            <div className={styles.header + " bg-[#E14957] flex items-center justify-between px-4 py-1"}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 70 70" fill="none">
+                                    <path d="M51.3331 15.4876L34.8539 6.6209C33.1039 5.68757 31.0331 5.68757 29.2831 6.6209L12.8331 15.4876C11.6372 16.1584 10.8789 17.4417 10.8789 18.8417C10.8789 20.2709 11.6081 21.5542 12.8331 22.1959L29.3122 31.0626C30.1872 31.5292 31.1497 31.7626 32.0831 31.7626C33.0164 31.7626 34.0081 31.5292 34.8539 31.0626L51.3331 22.1959C52.5289 21.5542 53.2872 20.2709 53.2872 18.8417C53.2872 17.4417 52.5289 16.1584 51.3331 15.4876Z" fill="white"/>
+                                    <path d="M26.6006 34.1541L11.2882 26.5124C10.0923 25.8999 8.75065 25.9874 7.61315 26.6582C6.50482 27.3582 5.83398 28.5541 5.83398 29.8666V44.3332C5.83398 46.8416 7.23398 49.0874 9.47982 50.2249L24.7923 57.8666C25.3173 58.1291 25.9007 58.2749 26.484 58.2749C27.1548 58.2749 27.8548 58.0707 28.4673 57.7207C29.5757 57.0207 30.2465 55.8249 30.2465 54.5124V40.0457C30.2173 37.5374 28.8173 35.2916 26.6006 34.1541Z" fill="white"/>
+                                    <path d="M58.3345 29.8666V37.0416C56.9345 36.6332 55.447 36.4582 53.9595 36.4582C49.9928 36.4582 46.1137 37.8291 43.0512 40.2791C38.8512 43.5749 36.4595 48.5624 36.4595 53.9582C36.4595 55.3874 36.6345 56.8166 37.0137 58.1874C36.5762 58.1291 36.1387 57.9541 35.7303 57.6916C34.622 57.0207 33.9512 55.8249 33.9512 54.5124V40.0457C33.9512 37.5374 35.3512 35.2916 37.5678 34.1541L52.8803 26.5124C54.0762 25.8999 55.4178 25.9874 56.5553 26.6582C57.6637 27.3582 58.3345 28.5541 58.3345 29.8666Z" fill="white"/>
+                                    <path d="M64.109 45.646C61.7173 42.7002 58.0715 40.8335 53.959 40.8335C50.8673 40.8335 48.009 41.9127 45.7632 43.721C42.7298 46.1127 40.834 49.8168 40.834 53.9585C40.834 58.071 42.7007 61.7168 45.6465 64.1085C47.8923 65.9752 50.809 67.0835 53.959 67.0835C57.284 67.0835 60.2882 65.8293 62.6215 63.8168C65.334 61.396 67.084 57.896 67.084 53.9585C67.084 50.8085 65.9757 47.8918 64.109 45.646ZM56.9632 54.7752C56.9632 55.5335 56.5548 56.2627 55.9132 56.6418L51.8007 59.0918C51.4507 59.296 51.0715 59.4127 50.6632 59.4127C49.934 59.4127 49.2048 59.0335 48.7965 58.3627C48.184 57.3127 48.5048 55.971 49.5548 55.3585L52.5882 53.5502V49.8752C52.5882 48.6793 53.5798 47.6877 54.7757 47.6877C55.9715 47.6877 56.9632 48.6793 56.9632 49.8752V54.7752Z" fill="#29BE2F"/>
+                                </svg>
+                                {/* <p className="text-sm text-white">
+                                    این کالا به سبد خرید شما اضافه گردید . 
+                                </p> */}
+                                <p className="text-white text-2xl cursor-pointer" onClick={() => setDisplay(false)}>
+                                    X
+                                </p>
+                            </div>
+                            <div className={styles.wrapper + " p-3"}>
+                                {chassis?.length > 0 ?
+                                    <div className={styles.old}>
+                                        <p className="font-bold mb-3">
+                                            شماره شاسی ثبت شده  
+                                        </p>
+                                        {chassis?.map((item) => (
+                                            <div className="relative bg-[#D9D9D94D] flex items-center text-right p-2 mb-2" onClick={() => setActiveChassi(item?.id)}>
+                                                <div className="flex gap-2 items-center ml-auto"> 
+                                                    <p className="text-right ml-auto ">
+                                                        {item?.number}
+                                                    </p>
+                                                    <p className="text-right ml-auto ">
+                                                        {item?.name}
+                                                    </p>
+                                                </div>
+                                                {item?.id === activeChassi ? 
+                                                    <svg className="absolute cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 32 32" fill="none">
+                                                        <rect x="0.32" y="0.32" width="31.36" height="31.36" fill="#FF3333" stroke="black" stroke-width="0.64"/>
+                                                    </svg>
+                                                    :
+                                                    <svg className="absolute cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 32 32" fill="none">
+                                                        <rect x="0.32" y="0.32" width="31.36" height="31.36" fill="transparent" stroke="black" stroke-width="0.64"/>
+                                                    </svg>
+                                                }
+                                            </div>
+                                        ))}
+                                    </div> : ""
+                                }
+                                <div className={styles.new + " mt-4 mb-3"}>
+                                    <p className="font-bold mb-3">
+                                        اضافه کردن شماره شاسی جدید 
+                                    </p>
+                                    <form className="w-full m-x-auto flex justify-center items-center flex-col gap-4">
+                                        <div className={styles.formgroup + " relative w-full flex gap-2 max-md:flex-col"}>
+                                            <input
+                                                type="text"
+                                                name="number"
+                                                className="border rounded-lg border-[#FF3333] placeholder-opacity-25 w-full py-3 px-5 text-xs tracking-widest"
+                                                placeholder="شماره شاسی را وارد کنید"
+                                                value={formData.number}
+                                                onChange={handleChange}
+                                            />
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                className="border rounded-lg border-[#FF3333] placeholder-opacity-25 w-full py-3 px-5 text-xs tracking-widest"
+                                                placeholder="نام خودرو"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className={styles.button}>
+                                            <button style={{border: "1px solid #FF3333"}} className="border-2 border-[#FF3333] text-[#FF3333] text-sm px-3 py-1 rounded-lg" onClick={handleSubmit}>
+                                                ثبت 
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                    {activeChassi !== null ?
+                                        <div className={styles.button} onClick={handleAddToCart}>
+                                            <SecondPrimaryButton>
+                                                اضافه کردن به سبد خرید 
+                                            </SecondPrimaryButton>
+                                        </div>
+                                        :
+                                        <div className={styles.button}>
+                                            <DeRedPrimaryButton>
+                                                اضافه کردن به سبد خرید 
+                                            </DeRedPrimaryButton>
+                                        </div>
+                                    }
+                            </div>
+                        </div>
+                    </div> : ""
                 }
+                <div className="max-md:hidden">
+                    <SpecialSaleBanner />
+                </div>
 
-                <SpecialSaleBanner />
 
                 <div className={styles.container + " container w-11/12 mx-auto flex flex-col gap-20"}>
                     <div className={styles.image + " flex justify-center gap-10 max-w-5xl mt-20 mx-auto gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
@@ -125,7 +284,8 @@ const SingleShop = () => {
                         <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4 max-md:border-none"}>
                             <p className={styles.label + " absolute top-[-15px] left-[17px] max-md:left-0 bg-[#FC0F0F] text-white px-2 rounded-2xl text-center text-xs max-md:text-[12px]"}>به روز رسانی هر  <span className="text-lg mr-2 max-md:text-[11px]">۱۲ ساعت</span></p>
                             {/* <div className="max-md:text-sm" dangerouslySetInnerHTML={{ __html: data?.product?.body}}>میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</div> */}
-                            <p className="max-md:text-sm">{data?.product?.body}</p>
+                            <div className={styles.desc} dangerouslySetInnerHTML={{ __html: data?.product?.review[0]?.body}}></div>
+                            {/* <p className="max-md:text-sm">{data?.product?.body}</p> */}
                             <div className={styles.footer + " flex max-md:flex-col-reverse items-center justify-between"}>
                                 <div className="max-md:flex max-md:flex-row-reverse max-md:justify-between max-md:items-center max-md:w-full">
                                     <p className="font-bold">{data?.product?.offPrice} تومان</p>

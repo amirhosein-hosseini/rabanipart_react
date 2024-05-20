@@ -36,11 +36,21 @@
             }
         }
     }
+    .items{
+        direction: rtl;
+    }
 }
 
 
 .cartPopUp{
     background: rgba(68, 68, 68, 0.8);
+    form{
+        .button{
+            button{
+                border: 2px solid #FF3333;
+            }
+        }
+    }
 }
 
 .mobileFilter{
@@ -59,3 +69,5 @@
 .shopArchiveContainer .items{
     direction: rtl;
 }
+
+

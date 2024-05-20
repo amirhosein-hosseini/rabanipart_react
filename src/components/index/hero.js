@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { RedPrimaryButton } from "../button";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
+
+    const [searchValue , setSearchValue] = useState(null);
+
+
+    const handleInputChange = (event) => {
+        setSearchValue(event.target.value);
+    };
+
+
     return(
         <div className={styles.hero + " w-full h-[90vh] max-md:h-[50vh] flex items-center justify-end mt-[-10px]"}>
             <div className={styles.herocontainer + " container w-11/12 mx-auto text-right flex flex-col gap-12"}>
@@ -20,9 +29,11 @@ const Hero = () => {
                         className="w-full h-[50px] max-md:h-[36px] bg-[#4A4A4A] text-white max-md:text-xs rounded-lg pl-14 pr-[150px] max-md:pr-[100px]"
                         type="text" 
                         placeholder="نام و کد قطعه مورد نظر را بنویسید" 
+                        value={searchValue}
+                        onChange={handleInputChange} 
                     />
                     <div className="absolute top-[6px] right-[5px] max-md:top-[3px] max-md:right-[4px]">
-                        <Link to={"/shop"}>
+                        <Link to={"/search/" + searchValue}>
                             <RedPrimaryButton>
                                 جستجو قطعات  
                             </RedPrimaryButton>

@@ -7,11 +7,13 @@ import { SpecialSaleBanner, WebsiteBanner } from "../banner";
 import { getAllBrands, getAllProducts } from "../../api/shop";
 import { getAllCategories } from "../../api/home";
 import PriceRangeSlider from "./priceRangeSlider";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Slider from '@mui/material/Slider';
 
 const ShopArchive = () => {
 
-    const params = useParams()
+    const params = useParams();
+    const navigate = useNavigate();
     const [showMobileCategory , setShowMobileCategory] = useState(false);
     const [showMobileFilter , setShowMobileFilter] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -19,6 +21,7 @@ const ShopArchive = () => {
     const [categories , setCategories] = useState(null);
     const [showFilterItems , setShowFilterItems] = useState(null);
     const [brands , setBrands] = useState(null);
+    const [price, setPrice] = useState([0, 100]); // Initial range values
     const [priceRange, setPriceRange] = useState([0, 100]); // Example initial price range
     const [filter , setFilter] = useState({
         "off" : false,
@@ -27,10 +30,10 @@ const ShopArchive = () => {
         "showcase" : null,
         "suggest" : "",
         "exists" : "",
-        "cat": "",
+        "cat": params?.params?.includes("cat") ? params.params : "",
         "brand" : "",
-        "lowest_price" : null,
-        "highest_price" : null,
+        "lowest_price" : "",
+        "highest_price" : "",
         "vip_exists" : "",
     });
 
@@ -49,8 +52,6 @@ const ShopArchive = () => {
     } , [])
 
 
-
-    console.log(params.cat)
 
     useEffect(() => {
       const handleResize = () => {
@@ -75,7 +76,7 @@ const ShopArchive = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const data = await getAllProducts(filter);
+            const data = await getAllProducts(params.params);
             setProducts(data?.data?.data);
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -83,7 +84,7 @@ const ShopArchive = () => {
         };
     
         fetchData();
-    }, [filter]);
+    }, [params.params]);
 
 
 
@@ -142,7 +143,7 @@ const ShopArchive = () => {
     const handleCategorySort = (place , value) => {
         setFilter((prevFilterData) => ({
           ...prevFilterData,
-          [place]: value,
+          [place]: "&cat=" + value,
         }))
     }
 
@@ -175,6 +176,21 @@ const ShopArchive = () => {
         setFilter(newFilter);
     };
 
+    useEffect(() => {   
+        navigate(`/shop/${filter?.suggest !== "" ? "&suggest=" + filter?.suggest : ""}${filter?.exists !== "" ? "&exists=" + filter?.exists :""}${filter?.vip_exists !== "" ? "vip_exists=" + filter?.vip_exists : ""}${filter?.cat !== "" ? filter?.cat : ""}${filter?.brand !== "" ? "&brand=" + filter?.brand :""}${filter?.lowest_price !== "" ? "&lowest_price=" + filter?.lowest_price : ""}${filter?.highest_price !== "" ? "&highest_price=" + filter?.highest_price : ""}`)
+    } , [filter])
+
+
+
+    // function for handle price range change
+    const handleChange = (event, newValue) => {
+        setPrice(newValue);
+        setFilter((prevFilterData) => ({
+            ...prevFilterData,
+            ["lowest_price"]: newValue[0],
+            ["highest_price"]: newValue[1],
+        }))
+    };
 
     return(
         <div className={styles.shopArchive + " flex flex-col gap-20 max-md:gap-5 mb-10 mt-20"}>
@@ -296,7 +312,7 @@ const ShopArchive = () => {
                                     <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                                     </svg>
-                                    <p className="text-sm">نام خودرو</p>
+                                    <p className="text-sm">برند ها</p>
                                 </div>
                                 {showFilterItems === "brand" ? 
                                     <div className="items mt-3 flex flex-col gap-2">
@@ -353,7 +369,19 @@ const ShopArchive = () => {
                                 </div>
                                 {showFilterItems === "price" ? 
                                     <div className="priceRange">
-                                        <PriceRangeSlider />
+                                        <div style={{ width: "90%" , margin : "0 auto" }}>
+                                            <Slider
+                                                value={price}
+                                                onChange={handleChange}
+                                                valueLabelDisplay="auto"
+                                                aria-labelledby="range-slider"
+                                                min={0}
+                                                max={10000} // Set your maximum price here
+                                            />
+                                            <p className='text-xs'>
+                                                از {price[0]} تا {price[1]} <span>تومان</span>
+                                            </p>
+                                        </div>
                                     </div> : ""
                                 }
                             </div>
@@ -385,7 +413,7 @@ const ShopArchive = () => {
                 </div>
                 <div className={styles.items + " flex flex-col gap-3 mb-10"}>
                     {categories?.map((item) => (
-                        <p className="cursor-pointer">{item?.name}</p>
+                        <p className="cursor-pointer" onClick={() => handleCategorySort("cat" , item?.id)}>{item?.name}</p>
                     ))}
                 </div>
             </div>
@@ -406,19 +434,19 @@ const ShopArchive = () => {
                             <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                             </svg>
-                            <p className="text-sm">نام خودرو</p>
+                            <p className="text-sm">برند ها</p>
                         </div>
                         {showFilterItems === "brand" ? 
                             <div className="items mt-3 flex flex-col gap-2">
                                 {brands?.map((item) => (
-                                    <p className="text-xs cursor-pointer">{item?.name}</p>
+                                    <p className="text-xs cursor-pointer" onClick={() => handleBrandSort("brand" , item?.id)}>{item?.name}</p>
                                 ))}
                             </div> : ""
                         }
                     </div>
                     <div className={styles.item + " flex items-center justify-between py-4"}>
                         <label class="switch">
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={filter.suggest === "1"} onChange={handleSuggestkboxChange} />
                             <span class="slider round" />
                         </label>
                         <p className="text-sm">فروش ویژه</p>
@@ -431,14 +459,14 @@ const ShopArchive = () => {
                     </div> */}
                     <div className={styles.item + " flex items-center justify-between py-4"}>
                         <label class="switch">
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={filter.exists === "1"} onChange={handleExstsboxChange} />
                             <span class="slider round" />
                         </label>
                         <p className="text-sm">کالاهای موجود</p>
                     </div>
                     <div className={styles.item + " flex items-center justify-between py-4"}>
                         <label class="switch">
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={filter.vip_exists === "1"} onChange={handleVipExstsboxChange} />
                             <span class="slider round" />
                         </label>
                         <p className="text-sm">کالا های ربانی پارت</p>
@@ -452,7 +480,19 @@ const ShopArchive = () => {
                         </div>
                         {showFilterItems === "price" ? 
                             <div className="priceRange">
-                                <PriceRangeSlider />
+                                <div style={{ width: "90%" , margin : "0 auto" }}>
+                                    <Slider
+                                        value={price}
+                                        onChange={handleChange}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="range-slider"
+                                        min={0}
+                                        max={10000} // Set your maximum price here
+                                    />
+                                    <p className='text-xs'>
+                                        از {price[0]} تا {price[1]} <span>تومان</span>
+                                    </p>
+                                </div>
                             </div> : ""
                         }
                     </div>

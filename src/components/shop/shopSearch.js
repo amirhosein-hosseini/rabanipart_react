@@ -6,42 +6,33 @@ import Faq from "../faq";
 import { getAllCategories } from "../../api/home";
 import { getAllProducts } from "../../api/shop";
 import NotActiveShopItem from "./notActiveShopItem";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { prefix, url } from "../../api/domain";
 
-const SepcialSell = () => {
+const ShopSearch = () => {
 
 
-    const [categories , setCategories] = useState(null);
+
+    const params = useParams();
     const [products , setProducts] = useState(null);
 
 
-    // function for get all categories data
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const data = await getAllCategories();
-            setCategories(data?.data?.data);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
-    
-        fetchData();
-    }, []);
+        axios.post(url + "/" + prefix + '/search', {search: params?.slug})
+            .then((response) => {
+                setProducts(response?.data?.products)
+            })
+            .catch((error) => {
+                console.log(error.response.data)
+            })
+            .finally(() => {
+                console.log("final")
+        });
+    } , [])
 
 
-    // get data for product items
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const data = await getAllProducts("&suggest=1");
-            setProducts(data?.data?.data);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
-    
-        fetchData();
-    }, []);
+
 
 
     const parsToArray = (string) => {
@@ -49,12 +40,13 @@ const SepcialSell = () => {
         return actualArray
     }
 
+
     return(
         <div className={styles.specialSell + " mt-40 mb-20 max-md:mt-20"}>
             <div className={styles.container + " container w-11/12 max-w-5xl mx-auto overflow-hidden"}>
                 <div className={styles.title + " mb-10"}>
                     <p className="font-bold text-xl">
-                        پیشنهاد  ویژه 
+                        {params?.slug}
                     </p>
                 </div>
                 <div className={styles.items + " grid grid-cols-3 gap-4 max-md:grid-cols-1"}>
@@ -74,4 +66,4 @@ const SepcialSell = () => {
     )
 }
 
-export default SepcialSell;
+export default ShopSearch;

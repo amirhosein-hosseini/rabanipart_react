@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { RedPrimaryButton } from "../button";
 import BasketItem from "./basketItem";
 import ActiveShopItem from "../shop/activeShopItem";
+import { getUserCart } from "../../api/user";
 
 const Basket = () => {
+
+
+    const [cartItems , setCartItems] = useState(null);
+
+    // function for get all carts data
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getUserCart();
+            setCartItems(data?.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+
+    console.log(cartItems)
+
+
     return(
         <div className={styles.basket + " mt-40 mb-10 max-md:mt-20"}>
             <div className={styles.basketContainer + " container w-11/12 mx-auto"}>
@@ -58,10 +81,6 @@ const Basket = () => {
                         <ActiveShopItem />
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
     )
