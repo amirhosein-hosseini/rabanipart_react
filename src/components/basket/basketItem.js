@@ -1,11 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
+import { prefix, url } from "../../api/domain";
+import axios from "axios";
+import { getCookie } from "../../api/auth";
 
-const BasketItem = () => {
+const BasketItem = ({id , chassi_id , color , count , created_at , delivery , discount , guarentee_id , post , post_id , price , size , updated_at , user_id}) => {
+
+
+
+    const token = getCookie('token')
+    const parsToArray = (string) => {
+        let actualArray = JSON.parse(string);
+        return actualArray
+    }
+    const [active , setActive] = useState(false);
+
+
+    const formatNumberWithThousandSeparator = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    const handleDecrease = () => {
+        setActive(true);
+        axios.post(url + "/" + prefix + '/cart/decrease' , {cart_id : id},{
+                headers:{
+                'Authorization' : 'Bearer ' + token,
+                }
+            })
+            .then((response) => {
+                console.log(response?.data)
+                setActive(false);
+                window.location.reload()
+            })
+            .catch((error) => {
+                // setError(error.response.data)
+                setActive(false);
+            })
+            .finally(() => {
+                console.log("final")
+                setActive(false);
+            });
+    }
+
+    const handleIncrease = () => {
+        setActive(true);
+        axios.post(url + "/" + prefix + '/cart/increase' , {cart_id : id},{
+                headers:{
+                'Authorization' : 'Bearer ' + token,
+                }
+            })
+            .then((response) => {
+                // setErrors(response?.data?.data?.errors);
+                console.log(response?.data)
+                setActive(false);
+                window.location.reload()
+            })
+            .catch((error) => {
+                // setError(error.response.data)
+                setActive(false);
+            })
+            .finally(() => {
+                console.log("final")
+                setActive(false);
+            });
+    }
+
+
+
     return(
         <div className={styles.basketItem + " w-full justify-end flex max-md:flex-col-reverse max-md:border-b max-md:border-b-black max-md:pb-5 items-center gap-4"}>
             <div className={styles.desc}>
-                <p className="text-sm font-bold"> ميل لنگ هیوندای آزرا اصلی 2008 23110-3C140</p>
+                <p className="text-sm font-bold">{post?.title}</p>
                 <div className="flex justify-end items-center gap-2 mt-2">
                     <p className="text-xs font-bold">
                         ربانی پارت 
@@ -25,20 +90,20 @@ const BasketItem = () => {
                         <path d="M25.0687 6.3008L17.7841 3.57237C17.0292 3.29423 15.7974 3.29423 15.0425 3.57237L7.75784 6.3008C6.35389 6.83059 5.21484 8.47294 5.21484 9.96959V20.6979C5.21484 21.7707 5.91682 23.1879 6.77773 23.8236L14.0623 29.2672C15.3471 30.2341 17.453 30.2341 18.7377 29.2672L26.0224 23.8236C26.8833 23.1746 27.5852 21.7707 27.5852 20.6979V9.96959C27.5985 8.47294 26.4594 6.83059 25.0687 6.3008ZM21.0158 13.7179L15.3206 19.4131C15.1219 19.6118 14.8703 19.7045 14.6186 19.7045C14.367 19.7045 14.1153 19.6118 13.9166 19.4131L11.7975 17.2675C11.4134 16.8834 11.4134 16.2476 11.7975 15.8635C12.1816 15.4794 12.8173 15.4794 13.2014 15.8635L14.6319 17.2939L19.6251 12.3007C20.0092 11.9166 20.645 11.9166 21.0291 12.3007C21.4132 12.6848 21.4132 13.3338 21.0158 13.7179Z" fill="#292D32"/>
                     </svg>
                 </div>
-                <p className="text-xs max-w-[280px] mt-2">
+                <p className="text-xs max-w-[280px] ml-auto mt-2">
                     هزینه این سفارش هنوز پرداخت نشده‌ و در صورت اتمام موجودی، کالاها از سبد حذف می‌شوند
                 </p>
-                <div className="flex items-center justify-between max-w-[300px] mt-3">
-                    <p>۱۲۰,۰۰۰,۰۰۰ <span>تومان</span> </p>
+                <div className="flex items-center justify-between max-w-[300px] ml-auto mt-3">
+                    <p>{formatNumberWithThousandSeparator(price)}<span>تومان</span> </p>
                     <div className="flex gap-3 bg-[#E14957] px-3 items-center rounded-lg justify-between">
-                        <p className="text-lg text-white">-</p>
-                        <p className="text-lg text-white">1</p>
-                        <p className="text-lg text-white">+</p>
+                        <button disabled={active === true ? true : false} className="text-lg text-white cursor-pointer" onClick={handleDecrease}>-</button>
+                        <p className="text-lg text-white">{count}</p>
+                        <button disabled={active === true ? true : false} className="text-lg text-white cursor-pointer" onClick={handleIncrease}>+</button>
                     </div>
                 </div>
             </div>
             <div className={styles.image + " border border-black rounded-lg max-w-[300px] overflow-hidden"}>
-                <img className="object-cover w-full" src="../../images/shopitemimage.png" alt="image" />
+                <img className="object-cover w-full" src={url + parsToArray(post?.image)[0]}alt="image" />
             </div>
         </div>
     )

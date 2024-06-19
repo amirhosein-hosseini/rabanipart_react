@@ -192,6 +192,8 @@ const ShopArchive = () => {
         }))
     };
 
+    
+
     return(
         <div className={styles.shopArchive + " flex flex-col gap-20 max-md:gap-5 mb-10 mt-20"}>
 
@@ -201,10 +203,11 @@ const ShopArchive = () => {
 
 
             <div className={styles.shopArchiveContainer + " flex max-md:flex-col-reverse items-start gap-7 max-md:gap-5 container w-11/12 mx-auto mt-10 max-md:mt-4"}>
-                <div className={styles.items + " w-3/4 max-md:w-full grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-1 gap-4 max-md:gap-7"}>
-                    {products?.map((item) => (
+                <div className={styles.items + " w-3/4 max-md:w-full grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-1"}>
+                    {products?.map((item) => 
+                    
                         item?.vipCount === 0 ? <NotActiveShopItem slug={item?.slug} image={parsToArray(item?.image)[0]} title={item?.title} /> : <ActiveShopItem slug={item?.slug} image={parsToArray(item?.image)[0]} title={item?.title} price={item?.offPrice} />
-                    ))}
+                    )}
                 </div>
                 <div className={styles.mobileFilter + " md:hidden flex gap-2 items-center ml-auto"}>
                     <div>
@@ -230,7 +233,7 @@ const ShopArchive = () => {
                     </div>
                 </div>
                 <div className={styles.filter + " w-1/4 flex flex-col gap-3 max-md:hidden"}>
-                    <div className={styles.related + " p-3 border border-[#E1E1E1] rounded-2xl flex flex-col gap-3"}>
+                    <div className={styles.related + " p-3 border border-[#D2D2D2] rounded-2xl flex flex-col gap-3"}>
                         <p className="font-bold">جستجوهای مرتبط</p>
                         <div className={styles.items + " flex flex-col gap-2"}>
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
@@ -287,7 +290,7 @@ const ShopArchive = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={styles.filters + " p-3 border border-[#E1E1E1] rounded-2xl flex flex-col gap-3"}>
+                    <div className={styles.filters + " p-3 border border-[#D2D2D2] rounded-2xl flex flex-col gap-3"}>
                         <p className="font-bold">فیلتر ها</p>
                         <div className={styles.items}>
                             <div className={styles.item + " py-4"}>
@@ -295,7 +298,7 @@ const ShopArchive = () => {
                                     <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                                     </svg>
-                                    <p className="text-sm">دسته بندی</p>
+                                    <p className="text-sm font-bold">دسته بندی</p>
                                 </div>
                                 {showFilterItems === "category" ? 
                                     <div className="items mt-3 flex flex-col gap-2">
@@ -312,7 +315,7 @@ const ShopArchive = () => {
                                     <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                                     </svg>
-                                    <p className="text-sm">برند ها</p>
+                                    <p className="text-sm font-bold">برند ها</p>
                                 </div>
                                 {showFilterItems === "brand" ? 
                                     <div className="items mt-3 flex flex-col gap-2">
@@ -329,7 +332,7 @@ const ShopArchive = () => {
                                     <input type="checkbox" checked={filter.suggest === "1"} onChange={handleSuggestkboxChange} />
                                     <span class="slider round" />
                                 </label>
-                                <p className="text-sm">فروش ویژه</p>
+                                <p className="text-sm font-bold">فروش ویژه</p>
                             </div>
                             {/* <div className={styles.item + " py-4"}>
                                 <div className=" flex items-center justify-between flex-row-reverse cursor-pointer" onClick={() => handleShowFilterItems("type")}>
@@ -351,21 +354,21 @@ const ShopArchive = () => {
                                     <input type="checkbox" checked={filter.exists === "1"} onChange={handleExstsboxChange} />
                                     <span class="slider round" />
                                 </label>
-                                <p className="text-sm">کالاهای موجود</p>
+                                <p className="text-sm font-bold">کالاهای موجود</p>
                             </div>
                             <div className={styles.item + " flex items-center justify-between py-4 flex-row-reverse"}>
                                 <label class="switch">
                                     <input type="checkbox" checked={filter.vip_exists === "1"} onChange={handleVipExstsboxChange} />
                                     <span class="slider round" />
                                 </label>
-                                <p className="text-sm">کالا های ربانی پارت</p>
+                                <p className="text-sm font-bold">کالا های ربانی پارت</p>
                             </div>
                             <div className={styles.item + " py-4"}>
                                 <div className="flex mb-3 cursor-pointer items-center justify-between  flex-row-reverse" onClick={() => handleShowFilterItems("price")}>
                                     <svg width="10" height="8" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2071 0.292893C14.8166 -0.0976311 14.1834 -0.0976311 13.7929 0.292893L8 6.08579L2.20711 0.292893C1.81658 -0.0976311 1.18342 -0.0976311 0.792893 0.292893C0.402369 0.683417 0.402369 1.31658 0.792893 1.70711L6.58579 7.5C7.36684 8.28105 8.63317 8.28105 9.41421 7.5L15.2071 1.70711C15.5976 1.31658 15.5976 0.683417 15.2071 0.292893Z" fill="#35383F"/>
                                     </svg>
-                                    <p className="text-sm">محدوده قیمت</p>
+                                    <p className="text-sm font-bold">محدوده قیمت</p>
                                 </div>
                                 {showFilterItems === "price" ? 
                                     <div className="priceRange">
@@ -376,7 +379,7 @@ const ShopArchive = () => {
                                                 valueLabelDisplay="auto"
                                                 aria-labelledby="range-slider"
                                                 min={0}
-                                                max={10000} // Set your maximum price here
+                                                max={100000000} // Set your maximum price here
                                             />
                                             <p className='text-xs'>
                                                 از {price[0]} تا {price[1]} <span>تومان</span>

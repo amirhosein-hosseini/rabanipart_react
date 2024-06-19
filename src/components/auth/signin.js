@@ -23,7 +23,8 @@ const Login = () => {
     });
     const [codeData , setCodeData] = useState({
         code: ""
-    })
+    });
+    const [errors , setErrors] = useState(null);
 
 
 
@@ -64,8 +65,13 @@ const Login = () => {
 
         axios.post(url + "/" + prefix + '/auth/register', formData)
             .then((response) => {
-                axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
-                setShowSendCode(true)
+                // axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
+                // setShowSendCode(true)
+                setErrors(response?.data?.data?.errors);
+                if(errors === undefined){
+                    axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
+                    setShowSendCode(true)
+                }
             })
             .catch((error) => {
                 // setError(error.response.data)
@@ -75,6 +81,7 @@ const Login = () => {
             });
     };
 
+    console.log(errors)
 
 
     const handleCodeSubmit = (e) => {
@@ -88,7 +95,7 @@ const Login = () => {
                 toast.success("به ربانی پارت خوش آمدید");
             })
             .catch((error) => {
-                console.log(error.response.data)
+                setErrors(error.response.data?.errors)
             })
             .finally(() => {
                 console.log("final")
@@ -112,14 +119,28 @@ const Login = () => {
                     <div className={styles.form + " w-1/2 max-md:w-full flex justify-center items-center flex-col"}>
                         <form className="w-1/2 max-md:w-11/12 m-x-auto flex justify-center items-center flex-col gap-4">
                             <div className={styles.formgroup + " relative w-full"}>
-                                <input
-                                    type="text"
-                                    name="code"
-                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                    placeholder="کد ارسال شده را وارد کنید"
-                                    value={codeData.code}
-                                    onChange={handleCodeChange}
-                                />
+                                {errors?.code ? 
+                                    <div>
+                                        <input
+                                            type="text"
+                                            name="code"
+                                            className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
+                                            placeholder="کد ارسال شده را وارد کنید"
+                                            value={codeData.code}
+                                            onChange={handleCodeChange}
+                                        />
+                                        <p className="text-[#EB0E23] text-xs mt-1">{errors?.code}</p>
+                                    </div> : 
+                                    <input
+                                        type="text"
+                                        name="code"
+                                        className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                        placeholder="کد ارسال شده را وارد کنید"
+                                        value={codeData.code}
+                                        onChange={handleCodeChange}
+                                    />
+                                }
+
                             </div>
                         </form>
                         <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
@@ -151,34 +172,76 @@ const Login = () => {
                 <div className={styles.form + " w-1/2 max-md:w-full flex justify-center items-center flex-col"}>
                     <form className="w-1/2 max-md:w-11/12 m-x-auto flex justify-center items-center flex-col gap-4">
                         <div className={styles.formgroup + " relative w-full"}>
-                            <input
-                                type="text"
-                                name="email"
-                                className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                placeholder="ایمیل( نام کاربری)"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
+                            {errors?.email ? 
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="email"
+                                        className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
+                                        placeholder="ایمیل( نام کاربری)"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.email}</p>
+                                </div> : 
+                                <input
+                                    type="text"
+                                    name="email"
+                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                    placeholder="ایمیل( نام کاربری)"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                            }
+
                         </div>
                         <div className={styles.formgroup + " relative w-full"}>
-                            <input
-                                type="text"
-                                name="name"
-                                className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                placeholder="نام و نام خانوادگی"
-                                value={formData.name}
-                                onChange={handleChange}
-                            />
+                            {errors?.name ? 
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
+                                        placeholder="نام و نام خانوادگی"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.name}</p>
+                                </div> : 
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                    placeholder="نام و نام خانوادگی"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                />
+                            }
+
                         </div>
                         <div className={styles.formgroup + " relative w-full"}>
-                            <input
-                                type="text"
-                                name="phone"
-                                className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                placeholder="شماره تلفن"
-                                value={formData.phone}
-                                onChange={handleChange}
-                            />
+                            {errors?.phone ? 
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="phone"
+                                        className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
+                                        placeholder="شماره تلفن"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.phone}</p>
+                                </div> : 
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                    placeholder="شماره تلفن"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                />
+                            }
+
                         </div>
                         {/* <div className={styles.formgroup + " relative w-full"}>
                             <input
@@ -201,14 +264,29 @@ const Login = () => {
                             />
                         </div> */}
                         <div className={styles.formgroup + " relative w-full"}>
-                            <input
-                                type={showPass}
-                                name="password"
-                                className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                placeholder="رمز"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
+                            {errors?.password ? 
+                                <div>
+                                    <input
+                                        type={showPass}
+                                        name="password"
+                                        className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
+                                        placeholder="رمز"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.password}</p>  
+                                </div> : 
+                                <input
+                                    type={showPass}
+                                    name="password"
+                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                    placeholder="رمز"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+
+                            }
+
                             <svg onClick={handleShowPassword} className="absolute left-3 top-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3E3E3E">
                                 <path d="M21.25 9.14999C18.94 5.51999 15.56 3.42999 12 3.42999C10.22 3.42999 8.49 3.94999 6.91 4.91999C5.33 5.89999 3.91 7.32999 2.75 9.14999C1.75 10.72 1.75 13.27 2.75 14.84C5.06 18.48 8.44 20.56 12 20.56C13.78 20.56 15.51 20.04 17.09 19.07C18.67 18.09 20.09 16.66 21.25 14.84C22.25 13.28 22.25 10.72 21.25 9.14999ZM12 16.04C9.76 16.04 7.96 14.23 7.96 12C7.96 9.76999 9.76 7.95999 12 7.95999C14.24 7.95999 16.04 9.76999 16.04 12C16.04 14.23 14.24 16.04 12 16.04Z" fill="black"/>
                                 <path d="M11.9999 9.14C10.4299 9.14 9.1499 10.42 9.1499 12C9.1499 13.57 10.4299 14.85 11.9999 14.85C13.5699 14.85 14.8599 13.57 14.8599 12C14.8599 10.43 13.5699 9.14 11.9999 9.14Z" fill="black"/>

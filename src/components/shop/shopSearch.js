@@ -4,7 +4,7 @@ import ActiveShopItem from "./activeShopItem";
 import Category from "../index/category";
 import Faq from "../faq";
 import { getAllCategories } from "../../api/home";
-import { getAllProducts } from "../../api/shop";
+import { getAllProducts, getAllSearchRequests } from "../../api/shop";
 import NotActiveShopItem from "./notActiveShopItem";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -18,18 +18,21 @@ const ShopSearch = () => {
     const [products , setProducts] = useState(null);
 
 
+    // function for get all search data
     useEffect(() => {
-        axios.post(url + "/" + prefix + '/search', {search: params?.slug})
-            .then((response) => {
-                setProducts(response?.data?.products)
-            })
-            .catch((error) => {
-                console.log(error.response.data)
-            })
-            .finally(() => {
-                console.log("final")
-        });
-    } , [])
+        const fetchData = async () => {
+          try {
+            const data = await getAllSearchRequests(params.slug);
+            setProducts(data?.data?.products);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+    }, []);
+
+    console.log(products)
 
 
 

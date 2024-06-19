@@ -59,3 +59,61 @@ export const getUserCart = async () => {
     throw new Error(error.message);
   }
 };
+
+
+export const getAllUserAddresses = async () => {
+
+  const token = getCookie("token");
+
+
+
+  try {
+    const response = await axios.get(url + "/" + prefix + '/user/address/get',{
+      headers:{
+        'Authorization' : 'Bearer ' + token,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+
+export const getAllCarriers = async () => {
+
+  const token = getCookie("token");
+
+
+
+  try {
+    const response = await axios.get(url + "/" + prefix + '/cart/carriers',{
+      headers:{
+        'Authorization' : 'Bearer ' + token,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+
+
+export const getGateWay = async () => {
+
+  const token = getCookie("token");
+
+
+
+  try {
+    const response = await axios.get(url + "/" + prefix + '/order/add',{
+      headers:{
+        'Authorization' : 'Bearer ' + token,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

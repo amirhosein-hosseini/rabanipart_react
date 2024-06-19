@@ -35,7 +35,7 @@ const ArchiveBlog = () => {
 
             <div className={styles.items + " container max-w-5xl w-11/12 mx-auto  mt-20 grid grid-cols-2 max-lg:grid-cols-1 gap-5"} style={{direction : "rtl"}}>
                 {blogs?.map((item) => (
-                    <BlogItem accept={item?.accept} body={item?.body} created_at={item?.created_at} id={item?.id} image={item?.image} slug={item?.slug} status={item?.status} suggest={item?.suggest} time={item?.time} title={item?.title} updated_at={item?.updated_at} user_id={item?.user_id} />
+                    <BlogItem accept={item?.accept} desc={item?.description} body={item?.body} created_at={item?.created_at} id={item?.id} image={item?.image} slug={item?.slug} status={item?.status} suggest={item?.suggest} time={item?.time} title={item?.title} updated_at={item?.updated_at} user_id={item?.user_id} />
                 ))}
             </div>
 

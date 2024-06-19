@@ -19,37 +19,44 @@
 }
 
 
-.appInstall{
-    button{
-        position: relative;
-        &::after{
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            transform: translate(0,-50%);
-            content: "";
-            height: 3px;
-            background: linear-gradient(144deg, rgba(235,14,35,0) 0%, rgba(235,14,35,1) 100%);            width: 100%;
-        }
-        &::before{
-            position: absolute;
-            top: 50%;
-            right: 100%;
-            transform: translate(0,-50%);
-            content: "";
-            height: 3px;
-            background: linear-gradient(144deg, rgba(235,14,35,1) 0%, rgba(0,0,0,0) 100%);
-            width: 100%;
-        }
-    }
-}
+// .appInstall{
+//     button{
+//         position: relative;
+//         &::after{
+//             position: absolute;
+//             top: 50%;
+//             left: 100%;
+//             transform: translate(0,-50%);
+//             content: "";
+//             height: 3px;
+//             background: linear-gradient(144deg, rgba(235,14,35,0) 0%, rgba(235,14,35,1) 100%);            width: 100%;
+//         }
+//         &::before{
+//             position: absolute;
+//             top: 50%;
+//             right: 100%;
+//             transform: translate(0,-50%);
+//             content: "";
+//             height: 3px;
+//             background: linear-gradient(144deg, rgba(235,14,35,1) 0%, rgba(0,0,0,0) 100%);
+//             width: 100%;
+//         }
+//     }
+// }
+
+// .indexBlog{
+//     @media only screen and (max-width:768px){
+//         overflow-x: scroll;
+//         overflow-y: hidden;
+//         white-space: normal;
+//         display: flex;
+//     }
+// }
+
 
 .indexBlog{
-    @media only screen and (max-width:768px){
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: normal;
-        display: flex;
+    .blogItem{
+        min-width: 100px;
     }
 }
 
@@ -64,3 +71,20 @@
         }
     }
 }
+
+
+
+// .headingTitle{
+//     p{
+//         &::after{
+//             position: absolute;
+//             content: "";
+//             width: 78%;
+//             height: 1px !important;
+//             background: black;
+//             top: 50%;
+//             left: 0;
+//             transform: translate(0,-50%);
+//         }
+//     }
+// }

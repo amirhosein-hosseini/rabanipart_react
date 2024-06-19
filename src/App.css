@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Yekan Bakh";
-  src: url("../public/font/YekanBakh-Regular.woff2");
+  src: url("../public/font/YekanBakhFaNum-Regular.woff2");
 }
 
 
@@ -9,6 +9,7 @@
   margin: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
+  font-family: "Yekan Bakh";
 }
 *::before , *::after{
   box-sizing: border-box;

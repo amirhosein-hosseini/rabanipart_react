@@ -12,11 +12,13 @@ import axios from "axios";
 import { prefix, url } from "../../api/domain";
 import { getCookie } from "../../api/auth";
 import { toast } from "react-toastify";
+import { useAuth } from "../../context/authContext";
 
 
 const SingleShop = () => {
 
 
+    const {isLoggedIn} = useAuth();
     const token = getCookie('token');
     const params = useParams();
     const [display , setDisplay] = useState(false);
@@ -162,6 +164,12 @@ const SingleShop = () => {
     }
 
 
+    const formatNumberWithThousandSeparator = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+
 
     return(
         <>
@@ -238,13 +246,31 @@ const SingleShop = () => {
                                             />
                                         </div>
                                         <div className={styles.button}>
-                                            <button style={{border: "1px solid #FF3333"}} className="border-2 border-[#FF3333] text-[#FF3333] text-sm px-3 py-1 rounded-lg" onClick={handleSubmit}>
-                                                ثبت 
-                                            </button>
+                                            {isLoggedIn === false ?
+                                                <Link to={"/login"}>
+                                                    <button style={{border: "1px solid #FF3333"}} className="border-2 border-[#FF3333] text-[#FF3333] text-sm px-3 py-1 rounded-lg">
+                                                        ثبت 
+                                                    </button>
+                                                </Link>
+                                                : 
+                                                <button style={{border: "1px solid #FF3333"}} className="border-2 border-[#FF3333] text-[#FF3333] text-sm px-3 py-1 rounded-lg" onClick={handleSubmit}>
+                                                    ثبت 
+                                                </button>
+                                            }
                                         </div>
                                     </form>
                                 </div>
-                                    {activeChassi !== null ?
+                                    {
+                                        isLoggedIn === false ?
+                                        <div className={styles.button}>
+                                            <Link to={"/login"}>
+                                                <SecondPrimaryButton>
+                                                    اضافه کردن به سبد خرید 
+                                                </SecondPrimaryButton>
+                                            </Link>
+                                        </div> 
+                                        :
+                                        activeChassi !== null ?
                                         <div className={styles.button} onClick={handleAddToCart}>
                                             <SecondPrimaryButton>
                                                 اضافه کردن به سبد خرید 
@@ -282,18 +308,35 @@ const SingleShop = () => {
                             {data?.product?.title}
                         </p>
                         <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4 max-md:border-none"}>
-                            <p className={styles.label + " absolute top-[-15px] left-[17px] max-md:left-0 bg-[#FC0F0F] text-white px-2 rounded-2xl text-center text-xs max-md:text-[12px]"}>به روز رسانی هر  <span className="text-lg mr-2 max-md:text-[11px]">۱۲ ساعت</span></p>
                             {/* <div className="max-md:text-sm" dangerouslySetInnerHTML={{ __html: data?.product?.body}}>میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</div> */}
                             <div className={styles.desc} dangerouslySetInnerHTML={{ __html: data?.product?.review[0]?.body}}></div>
                             {/* <p className="max-md:text-sm">{data?.product?.body}</p> */}
                             <div className={styles.footer + " flex max-md:flex-col-reverse items-center justify-between"}>
                                 <div className="max-md:flex max-md:flex-row-reverse max-md:justify-between max-md:items-center max-md:w-full">
-                                    <p className="font-bold">{data?.product?.offPrice} تومان</p>
-                                    <div onClick={addToCart}>
-                                        <RedPrimaryButton>
-                                            افزودن به سبد خرید 
-                                        </RedPrimaryButton>
-                                    </div>
+                                    <p className="font-bold">{formatNumberWithThousandSeparator(data?.product?.offPrice)} تومان</p>
+                                    {data?.product?.need_shasi === 0 && isLoggedIn === false?
+                                        <div  onClick={handleAddToCart}>
+                                            <Link to={"/login"}>
+                                                <RedPrimaryButton>
+                                                    افزودن به سبد خرید 
+                                                </RedPrimaryButton>
+                                            </Link>
+                                        </div>
+                                        : 
+                                        data?.product?.need_shasi === 0 && isLoggedIn === true ?
+                                        <div  onClick={handleAddToCart}>
+                                            <RedPrimaryButton>
+                                                افزودن به سبد خرید 
+                                            </RedPrimaryButton>
+                                        </div> : 
+
+                                        <div onClick={addToCart}>
+                                            <RedPrimaryButton>
+                                                افزودن به سبد خرید 
+                                            </RedPrimaryButton>
+                                        </div>
+                                    }
+
                                 </div>
                                 <div className="flex flex-col gap-2 max-md:w-full max-md:mb-5">
                                     <div className="flex justify-end items-center gap-1">

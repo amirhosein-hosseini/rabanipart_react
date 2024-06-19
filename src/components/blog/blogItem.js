@@ -3,10 +3,10 @@ import styles from "./styles.module.scss";
 import { url } from "../../api/domain";
 import { Link } from "react-router-dom";
 
-const BlogItem = ({accept , body , created_at , id , image , slug , status , suggest , time , title , updated_at , user_id}) => {
+const BlogItem = ({accept , desc , body , created_at , id , image , slug , status , suggest , time , title , updated_at , user_id , heightDisplay}) => {
     return(
         <Link to={"/blog/" + id} style={{direction : "ltr"}}>
-            <div className={styles.blogItem + " h-[369px] max-md:h-[280px] flex items-center gap-3 rounded-lg bg-[#E14957] mt-20"}>
+            <div className={styles.blogItem + " h-[280px] max-md:h-[230px] flex items-center gap-3 rounded-lg bg-[#E14957] mt-20"} style={{height: heightDisplay === "100%" ? "100%" : ""}}>
                 <div className={styles.image + " w-1/2 h-full overflow-hidden rounded-tl-lg rounded-tr-[0px] rounded-bl-lg rounded-br-[124px]"}>
                     <img className="object-cover w-full h-full" src={url + image} alt="image" />
                 </div>
@@ -17,7 +17,11 @@ const BlogItem = ({accept , body , created_at , id , image , slug , status , sug
                     <p className="text-white text-sm font-bold max-md:text-xs">
                         {title}
                     </p>
-                    <div className="text-white text-xs font-light leading-5 max-md:text-[9px]" dangerouslySetInnerHTML={{ __html: body}} />
+                    <div className="text-white text-xs font-light leading-5 max-md:text-[9px]">
+                        <p>
+                            {desc}
+                        </p>
+                    </div>
                     <div className="w-full flex justify-end">
                         <button className="relative bg-[#1C1C1C] text-right rounded-lg font-bold text-white flex w-[60px] justify-center items-center text-xs">
                             <p className="mr-2">

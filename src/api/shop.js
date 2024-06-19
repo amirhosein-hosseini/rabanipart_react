@@ -21,6 +21,22 @@ export const getAllProducts = async (filter) => {
 };
 
 
+export const getAllSearchRequests = async (slug) => {
+    try {
+        const response = await axios.get(url + "/" + prefix + "/product/search?search=" + slug);
+        
+
+        if (response.status === 200) {
+            return response;
+        } else {
+            throw new Error(`Failed to fetch data. Status: ${response.status}`);
+        }
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 
 export const showProduct = async (slug) => {
     try {
@@ -52,4 +68,5 @@ export const getAllBrands = async () => {
         throw new Error(error.message);
     }
 };
+
 

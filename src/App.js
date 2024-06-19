@@ -16,13 +16,19 @@ import Panel from "./components/panel";
 import SendCode from "./components/auth/sendCode";
 import SingleBlog from "./components/blog/singleBlog.js";
 import ShopSearch from "./components/shop/shopSearch";
+import Certificates from "./components/certificates/certificates.js";
+import Payment from "./components/payment/payment.js";
+import SuccessPay from "./components/payment/successPay.js";
+import CancelPay from "./components/payment/cancelPay.js";
+import FailPay from "./components/payment/failPay.js";
+import SearchPage from "./components/search/serchPage.js";
 
 function App() {
   const location = useLocation();
 
   const isHomePage = location.pathname === '/';
 
-  const hideHeaderFooterRoutes = ['/login' , '/signin'];
+  const hideHeaderFooterRoutes = ['/login' , '/signin' , '/search-page'];
 
   const shouldShowHeaderFooter = !hideHeaderFooterRoutes.some(path => location.pathname.startsWith(path));
 
@@ -38,6 +44,7 @@ function App() {
           <Route path="/shop/:params" element={<ShopArchive />} />
           <Route path="/special/:slug" element={<SepcialSell />} />
           <Route path="/search/:slug" element={<ShopSearch />} />
+          <Route path="/search-page" element={<SearchPage />} />
           <Route path="/product/:slug" element={<SingleShop />} />
           <Route path="/category/:cat" element={<ShopArchive />} />
           <Route path="/blog" element={<ArchiveBlog />} />
@@ -48,6 +55,11 @@ function App() {
           <Route path="/international-sell" element={<InternationalSell />} />
           <Route path="/basket" element={<Basket />} />
           <Route path="/panel" element={<Panel />} />
+          <Route path="/certificate" element={<Certificates />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/success-pay" element={<SuccessPay />} />
+          <Route path="/cancel-pay" element={<CancelPay />} />
+          <Route path="/fail-pay" element={<FailPay />} />
         </Routes>
         {shouldShowHeaderFooter && <Footer />}
     </div>

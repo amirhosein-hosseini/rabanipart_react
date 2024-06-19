@@ -4,6 +4,7 @@ import { RedPrimaryButton } from "../button";
 import BasketItem from "./basketItem";
 import ActiveShopItem from "../shop/activeShopItem";
 import { getUserCart } from "../../api/user";
+import { Link } from "react-router-dom";
 
 const Basket = () => {
 
@@ -24,8 +25,12 @@ const Basket = () => {
         fetchData();
     }, []);
 
+    const formatNumberWithThousandSeparator = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-    console.log(cartItems)
+
+    
 
 
     return(
@@ -49,28 +54,34 @@ const Basket = () => {
                         <div className={styles.total + " w-full border border-[#9C9C9C] rounded-lg mt-5"}>
                             <div className={styles.container + " p-3 flex flex-col gap-2 mb-2"}>
                                 <div className={styles.item + " flex justify-between"}>
-                                    <p className="text-sm">۱۲۰,۰۰۰,۰۰۰ <span className="text-xs">تومان</span> </p>
-                                    <p className="text-sm">قیمت کالاها </p>
+                                    <p className="text-xs">{formatNumberWithThousandSeparator(cartItems?.total_price)} <span className="text-xs">تومان</span> </p>
+                                    <p className="text-xs">قیمت کالاها </p>
                                 </div>
                                 <div className={styles.item + " flex justify-between"}>
-                                    <p className="text-sm">۱۲۰,۰۰۰,۰۰۰ <span className="text-xs">تومان</span> </p>
-                                    <p className="text-sm">قیمت کالاها </p>
+                                    <p className="text-xs">{formatNumberWithThousandSeparator(cartItems?.total_price_with_tax)} <span className="text-xs">تومان</span> </p>
+                                    <p className="text-xs">قیمت با مالیاب بر ارزش افزوده</p>
                                 </div>
                             </div>
-                            <RedPrimaryButton>
-                                ادامه خرید
-                            </RedPrimaryButton>
+                            <Link to={"/payment"}>
+                                <RedPrimaryButton>
+                                    ادامه خرید
+                                </RedPrimaryButton>
+                            </Link>
                         </div>
                     </div>
-                    <div className={styles.items + " w-2/3 max-md:w-full"}>
-                        <BasketItem />
+                    <div className={styles.items + " w-2/3 max-md:w-full flex flex-col gap-5"}>
+                        {cartItems?.items?.map((item) => (
+                            <BasketItem chassi_id={item?.chassi_id} color={item?.color} count={item?.count} created_at={item?.created_at} delivery={item?.delivery} discount={item?.discount} guarentee_id={item?.guarentee_id} id={item?.id} post={item?.post} post_id={item?.post_id} price={item?.price} size={item?.size} updated_at={item?.updated_at} user_id={item?.user_id} />
+                        ))}
+                        {cartItems?.items?.length === 0 ? <p className="text-[#EB0E23]">سبد خرید شما خالیست</p> : ''}
+                        
                         {/* <BasketItem /> */}
                     </div>
                 </div>
 
 
 
-                <div className={styles.related + " flex flex-col gap-7 mt-20"}>
+                {/* <div className={styles.related + " flex flex-col gap-7 mt-20"}>
                     <p className={styles.title + " font-bold text-xl"}>
                         پیشنهادات ویژه :
                     </p>
@@ -80,7 +91,7 @@ const Basket = () => {
                         <ActiveShopItem />
                         <ActiveShopItem />
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

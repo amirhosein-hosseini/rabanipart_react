@@ -1,9 +1,15 @@
 .shopItem{
-    .footer{
-        margin-top: -10%;
-        @media only screen and (max-width:768px){
-            margin-top: 0px;
-        }
+    // .footer{
+    //     margin-top: -10%;
+    //     @media only screen and (max-width:768px){
+    //         margin-top: 0px;
+    //     }
+    // }
+    transition: 0.3s;
+    &:hover{
+        transform: scale(1.01);
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        background: white;
     }
 }
 
