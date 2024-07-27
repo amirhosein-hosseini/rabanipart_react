@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllBlogs, getShowBlog } from "../../api/blog";
 import { url } from "../../api/domain";
 
 const SingleBlog = () => {
 
 
+    const navigate = useNavigate();
     const params = useParams();
     const [data,setData] = useState(null);
     const [blogs,setBlogs] = useState(null);
@@ -42,6 +43,12 @@ const SingleBlog = () => {
         fetchData();
     }, []);
 
+
+    const handleNavigate = (slug) => {
+        navigate("/blog/" + slug);
+        window.location.reload();
+    }
+
     
     return(
         <div className="my-20" style={{marginTop: "100px"}}>
@@ -70,9 +77,9 @@ const SingleBlog = () => {
                         </p>
                         <div className={styles.items + " flex flex-col gap-4 mt-10"}>
                             {blogs?.slice(0,8).map((item) => (
-                                <Link className="text-sm" to={"/blog/" + item?.slug}>
+                                <p className="text-sm cursor-pointer" onClick={() => handleNavigate(item?.id)}>
                                     {item?.title}
-                                </Link>
+                                </p>
                             ))}
                         </div>
                     </div>

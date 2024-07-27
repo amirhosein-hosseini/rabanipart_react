@@ -36,6 +36,9 @@ const ActiveShopItem = ({image , price , title , slug}) => {
             <div className={styles.shopItem + " border border-[#D2D2D2] p-2 h-[380px] max-md:h-full max-md:border-b max-md:border-r-transparent max-md:border-l-transparent max-md:border-b-[#D2D2D2] max-md:flex max-md:items-center max-md:gap-5"}>
                 <div className={styles.image + " relative h-[250px] max-md:h-[125px] z-10 w-full overflow-hidden max-md:max-w-[120px] rounded-lg"}>
                     <img className="object-cover w-full h-full" src={url + image} alt="image" />
+                    <div className="absolute right-0 top-0 w-full h-full">
+                        <img className="w-full h-full" src="../../images/watermark.png" alt="image" />
+                    </div>
                 </div>
                 <div className={styles.footer + " h-full z-20 max-md:bg-transparent flex flex-col max-md:justify-between h-[70%] w-full p-3"} style={{direction : "ltr"}}>
                     <div>

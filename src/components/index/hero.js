@@ -15,8 +15,8 @@ const Hero = () => {
 
 
     return(
-        <div className={styles.hero + " w-full h-[90vh] max-md:h-[50vh] flex items-center justify-end mt-[-10px]"}>
-            <div className={styles.herocontainer + " container max-w-6xl w-11/12 mx-auto text-right flex flex-col gap-20 max-md:gap-12 max-md:h-[80%] pt-[16%]"}>
+        <div className={styles.hero + " w-full h-[105vh] max-md:h-[50vh] flex items-center justify-end mt-[-10px] max-md:mt-[-40px]"}>
+            <div className={styles.herocontainer + " container max-w-6xl w-11/12 mx-auto text-right flex flex-col gap-20 max-md:gap-12 max-md:h-[80%] max-md:mt-[90px]"}>
                 <div className={styles.search + " relative w-2/3 max-md:w-full max-w-[800px] mx-auto flex justify-end"}>
                     <input 
                         className="w-full h-[60px] max-md:h-[36px] bg-[#4A4A4A] text-white max-md:text-xs rounded-lg pl-14 pr-[160px] max-md:pr-[105px]"
@@ -36,15 +36,19 @@ const Hero = () => {
                         <img className="max-md:w-6" src="../../images/searchvector.png" about="vector" />
                     </div>
                 </div>
-                <div className={styles.title + " max-w-2xl max-md:w-full ml-auto mt-auto"}>
-                    <p className="text-white font-black text-4xl mb-4 max-md:text-sm max-md:text-right">
-                        ربانی پارت، فروشگاه تخصصی لوازم یدکی
+                <div className={styles.title + " max-w-2xl max-md:w-full mx-auto mt-auto max-md:mt-[10%]"}>
+                    <p className="text-white text-center font-black text-5xl mb-4 max-md:text-sm max-md:text-right leading-[70px]">
+                        بازرگانی ربانی ، وارد کننده قطعات یدکی هیوندای و کیا موتورز
                     </p>
-                    <p className="text-white font-light max-md:text-right max-md:text-xs">
+                    {/* <p className="text-white font-light max-md:text-right max-md:text-xs">
                         فروشگاه ربانی پارت محصولات وارداتی خود را تحت عنوان سه برند وارد کرده و به دست مشتریان عزیز می رساند، شفاف سازی در صنعت لوازم یدکی خودرو در این دو برند بسیار مشهور و باکیفیت، هدف ربانی پارت همواره تامین کالا اورجینال و باکیفیت می‌باشد.
-                    </p>
+                    </p> */}
+                    <div className={styles.heroTowImage + " max-w-[200px] overflow-hidden mx-auto mt-10"}>
+                        <img className="object-cover w-full" src="../../images/kiaandhyundai.png" alt="image" />
+                    </div>
+                    
                 </div>
-                <div className={styles.glory + " max-md:hidden flex items-center gap-7 ml-auto"}>
+                <div className={styles.glory + " max-md:hidden flex items-center gap-7 mx-auto"}>
                     <div className={styles.item + " relative"}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="170" height="170" viewBox="0 0 170 170" fill="none">
                             <circle cx="85" cy="85" r="84.5" transform="rotate(-180 85 85)" stroke="url(#paint0_linear_1229_5503)"/>
@@ -57,11 +61,11 @@ const Hero = () => {
                         </svg>
                         <div className="absolute flex flex-col gap-2 items-center justfiy-center" style={{top: "50%" , left: "50%", transform: "translate(-50%,-50%"}}>
                             <p className="font-black text-white text-4xl">
-                                <span className="text-[#EB0E23] ml-[2px]">+</span>
-                                <AnimatedNumber value={125} />
+                                <AnimatedNumber value={30} />
+                                <span className="text-[#EB0E23] ml-[2px]">%</span>
                             </p>
                             <p className="text-white text-xs">
-                                شعبه توزیع  
+                                پیشرفت 
                             </p>
                         </div>
                     </div>
@@ -78,7 +82,7 @@ const Hero = () => {
                         <div className="absolute flex flex-col gap-2 items-center justfiy-center" style={{top: "50%" , left: "50%", transform: "translate(-50%,-50%"}}>
                             <p className="font-black text-white text-4xl">
                                 <span className="text-[#EB0E23] ml-[2px]">+</span>
-                                <AnimatedNumber value={2400} />
+                                <AnimatedNumber value={2860} />
                             </p>
                             <p className="text-white text-xs">
                                 کالا اصل ، کمیاب  
@@ -98,7 +102,7 @@ const Hero = () => {
                         <div className="absolute flex flex-col gap-2 items-center justfiy-center" style={{top: "50%" , left: "50%", transform: "translate(-50%,-50%"}}>
                             <p className="font-black text-white text-4xl">
                                 <span className="text-[#EB0E23] ml-[2px]">+</span>
-                                <AnimatedNumber value={2360} />
+                                <AnimatedNumber value={4320} />
                             </p>
                             <p className="text-white text-xs">
                                 مشتری 

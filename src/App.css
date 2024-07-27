@@ -42,7 +42,8 @@ a{
   color: inherit;
 }
 ul{
-  list-style: none;
+  direction: rtl;
+  margin-right: 30px !important;
   margin: 0;
   padding: 0;
 }
@@ -144,4 +145,37 @@ input:checked + .slider:before {
 .css-cp2j25-MuiSlider-thumb{
   height: 15px !important;
   width: 15px !important;
+}
+
+
+
+
+h1 {
+  font-size: 2em; /* or any size you prefer */
+  direction: rtl;
+}
+
+h2 {
+  font-size: 1.75em; /* or any size you prefer */
+  direction: rtl;
+}
+
+h3 {
+  font-size: 1.5em; /* or any size you prefer */
+  direction: rtl;
+}
+
+h4 {
+  font-size: 1.25em; /* or any size you prefer */
+  direction: rtl;
+}
+
+h5 {
+  font-size: 1em; /* or any size you prefer */
+  direction: rtl;
+}
+
+h6 {
+  font-size: 0.875em; /* or any size you prefer */
+  direction: rtl;
 }

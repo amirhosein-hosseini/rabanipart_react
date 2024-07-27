@@ -57,7 +57,7 @@ const Header = ({background}) => {
                     </div>
                 </div>
                 <div className={styles.navList}>
-                    <ul className="flex items-center gap-5">
+                    <ul className="flex items-center gap-5" style={{listStyle: "none"}}>
                         <li>
                             <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/"}>خانه</Link>
                         </li>
@@ -71,10 +71,10 @@ const Header = ({background}) => {
                             <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/international-sell"}>خرید بین المللی</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/"}>درباره ما</Link>
+                            <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/about"}>درباره ما</Link>
                         </li>
                         <li>
-                            <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/"}>تماس با ما</Link>
+                            <Link className="text-white text-[14px] duration-300 hover:text-[#FF0000]" to={"/contact"}>تماس با ما</Link>
                         </li>
                     </ul>
                 </div>

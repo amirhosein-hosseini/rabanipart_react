@@ -22,13 +22,16 @@ import SuccessPay from "./components/payment/successPay.js";
 import CancelPay from "./components/payment/cancelPay.js";
 import FailPay from "./components/payment/failPay.js";
 import SearchPage from "./components/search/serchPage.js";
+import ForgotPass from "./components/auth/resetPassword.js";
+import About from "./components/about/index.js";
+import Contact from "./components/contact/index.js";
 
 function App() {
   const location = useLocation();
 
   const isHomePage = location.pathname === '/';
 
-  const hideHeaderFooterRoutes = ['/login' , '/signin' , '/search-page'];
+  const hideHeaderFooterRoutes = ['/login' , '/signin' , '/search-page' , '/forgot-pass'];
 
   const shouldShowHeaderFooter = !hideHeaderFooterRoutes.some(path => location.pathname.startsWith(path));
 
@@ -40,6 +43,8 @@ function App() {
         
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={ <About /> } />
+          <Route path="/contact" element={ <Contact /> } />
           <Route path="/shop/" element={<ShopArchive />} />
           <Route path="/shop/:params" element={<ShopArchive />} />
           <Route path="/special/:slug" element={<SepcialSell />} />
@@ -51,6 +56,7 @@ function App() {
           <Route path="/blog/:slug" element={<SingleBlog />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/login" element={<Login />} />
+          <Route path="forgot-pass" element={<ForgotPass />} />
           <Route path="/sendcode" element={<SendCode />} />
           <Route path="/international-sell" element={<InternationalSell />} />
           <Route path="/basket" element={<Basket />} />

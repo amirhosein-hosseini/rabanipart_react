@@ -1,77 +1,61 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { OutlineBlackButton, SecondPrimaryButton } from "../button";
-import axios from "axios";
-import { prefix, url } from "../../api/domain";
-import { setCookie } from "../../api/auth";
-import { useAuth } from "../../context/authContext";
 import { toast } from "react-toastify";
+import { prefix, url } from "../../api/domain";
+import axios from "axios";
+import { useAuth } from "../../context/authContext";
 
-const Login = () => {
+const ForgotPass = () => {
 
 
-    const {signIn} = useAuth();
-    const navigate = useNavigate();
-    const [showPass , setShowPass] = useState("password");
+    const { signIn } = useAuth();
     const [showSendCode , setShowSendCode] = useState(false);
-    const [formData, setFormData] = useState({
-        password: "",
+    const [errors , setErrors] = useState(null)
+    const [phonNumber, setPhoneNumber] = useState({
+        type: "forget_password",
         phone: "",
     });
     const [codeData , setCodeData] = useState({
         code: ""
     });
-    const [errors , setErrors] = useState(null);
-
-
-    const handleShowPassword = () => {
-        if(showPass === "password"){
-            setShowPass("text")
-        }else if(showPass === "text"){
-            setShowPass("password")
-        }
-    }
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setPhoneNumber({ ...phonNumber, [name]: value });
     };
 
 
     const handleCodeChange = (e) => {
         const { name, value } = e.target;
-        setCodeData({ ...formData, [name]: value });
+        setCodeData({ ...codeData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
 
+
+
+
+
+
+    const handlePhoneSubmit = (e) => {
         e.preventDefault();
 
 
-        axios.post(url + "/" + prefix + '/auth/login', formData)
+        axios.post(url + "/" + prefix + '/auth/send-code', {phone: phonNumber?.phone , type: phonNumber.type})
             .then((response) => {
                 setErrors(response?.data?.data?.errors);
-                console.log(errors + " errors")
-                if(errors === undefined){
-                    toast.success("به ربانی پارت خوش آمدید");
-                    signIn(response?.data?.token);
+                if(response.status === 200){
+                    setShowSendCode(true);
                 }
             })
             .catch((error) => {
-                // setError(error.response.data)
-                if(error.response.data.error === "not_active"){
-                    axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
-                    setShowSendCode(true)
-                }
-                console.log(error.response.data)
+                toast.error(error.response.data.message)
             })
             .finally(() => {
                 console.log("final")
             });
-    };
-
+    }
 
 
 
@@ -80,10 +64,13 @@ const Login = () => {
         e.preventDefault();
 
 
-        axios.post(url + "/" + prefix + '/auth/check-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
+        axios.post(url + "/" + prefix + '/auth/check-code', {phone: phonNumber?.phone , code:codeData?.code, type: "forget_password"})
             .then((response) => {
-                signIn(response?.data?.token);
-                toast.success("به ربانی پارت خوش آمدید");
+                setErrors(response?.data?.data?.errors);
+                if(errors === undefined){
+                    toast.success(response.data.message);
+                    
+                }
             })
             .catch((error) => {
                 setErrors(error.response.data?.errors)
@@ -94,7 +81,8 @@ const Login = () => {
     };
 
 
-    if(showSendCode === true) {
+
+    if(showSendCode === true){
         return(
             <div className={styles.login + " relative h-screen"}>
                 <div className={styles.back + " absolute top-5 left-5 z-50"}>
@@ -107,6 +95,9 @@ const Login = () => {
                         <img className="object-cover w-full h-full" src="../../images/loginimage.png" alt="image" />
                     </div>
                     <div className={styles.form + " w-1/2 max-md:w-full flex justify-center items-center flex-col"}>
+                        <p className="text-center mb-5">
+                            بازیابی رمز عبور
+                        </p>
                         <form className="w-1/2 max-md:w-11/12 m-x-auto flex justify-center items-center flex-col gap-4">
                             <div className={styles.formgroup + " relative w-full"}>
                                 {errors?.code ? 
@@ -119,7 +110,7 @@ const Login = () => {
                                             value={codeData.code}
                                             onChange={handleCodeChange}
                                         />
-                                        <p className="text-[#EB0E23] text-xs mt-1">{errors?.phone}</p>
+                                        <p className="text-[#EB0E23] text-xs mt-1">{errors?.code}</p>
                                     </div> : 
                                     <input
                                         type="text"
@@ -130,6 +121,7 @@ const Login = () => {
                                         onChange={handleCodeChange}
                                     />
                                 }
+
                             </div>
                         </form>
                         <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
@@ -138,15 +130,22 @@ const Login = () => {
                                     تایید
                                 </SecondPrimaryButton>
                             </div>
+                            <div className="grid w-full">
+                                <Link to={"/login"}>
+                                    <OutlineBlackButton>
+                                        صفحه ورود
+                                    </OutlineBlackButton>
+                                </Link>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         )
     }
 
-
-
+    
     return(
         <div className={styles.login + " relative h-screen"}>
             <div className={styles.back + " absolute top-5 left-5 z-50"}>
@@ -159,88 +158,53 @@ const Login = () => {
                     <img className="object-cover w-full h-full" src="../../images/loginimage.png" alt="image" />
                 </div>
                 <div className={styles.form + " w-1/2 max-md:w-full flex justify-center items-center flex-col"}>
+                    <p className="text-center mb-5">
+                        بازیابی رمز عبور
+                    </p>
                     <form className="w-1/2 max-md:w-11/12 m-x-auto flex justify-center items-center flex-col gap-4">
                         <div className={styles.formgroup + " relative w-full"}>
-                            {errors?.phone ? 
-                                <div>
-                                    <input
-                                        type="text"
-                                        name="phone"
-                                        className={styles.redInput+ " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
-                                        placeholder="شماره تلفن"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                    />
-                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.phone}</p>
-                                </div>
-                                : 
+                        {errors?.phone ? 
+                            <div>
                                 <input
                                     type="text"
                                     name="phone"
                                     className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                    placeholder="شماره تلفن"
-                                    value={formData.phone}
+                                    placeholder="شماره تلفن را وارد کنید"
                                     onChange={handleChange}
+                                    value={phonNumber.phone}
                                 />
-                            }
-
-                        </div>
-                        <div className={styles.formgroup + " relative w-full"}>
-                            {errors?.password ? 
-                                <div>
-                                    <input
-                                        type={showPass}
-                                        name="password"
-                                        className={styles.redInput + " placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"}
-                                        placeholder="رمز"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                    />
-                                    <p className="text-[#EB0E23] text-xs mt-1">{errors?.password}</p>
-                                </div>
-                                :
-                                <input
-                                    type={showPass}
-                                    name="password"
-                                    className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
-                                    placeholder="رمز"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                />
-
-                            }
-
-                            <svg onClick={handleShowPassword} className="absolute left-3 top-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3E3E3E">
-                                <path d="M21.25 9.14999C18.94 5.51999 15.56 3.42999 12 3.42999C10.22 3.42999 8.49 3.94999 6.91 4.91999C5.33 5.89999 3.91 7.32999 2.75 9.14999C1.75 10.72 1.75 13.27 2.75 14.84C5.06 18.48 8.44 20.56 12 20.56C13.78 20.56 15.51 20.04 17.09 19.07C18.67 18.09 20.09 16.66 21.25 14.84C22.25 13.28 22.25 10.72 21.25 9.14999ZM12 16.04C9.76 16.04 7.96 14.23 7.96 12C7.96 9.76999 9.76 7.95999 12 7.95999C14.24 7.95999 16.04 9.76999 16.04 12C16.04 14.23 14.24 16.04 12 16.04Z" fill="black"/>
-                                <path d="M11.9999 9.14C10.4299 9.14 9.1499 10.42 9.1499 12C9.1499 13.57 10.4299 14.85 11.9999 14.85C13.5699 14.85 14.8599 13.57 14.8599 12C14.8599 10.43 13.5699 9.14 11.9999 9.14Z" fill="black"/>
-                            </svg>
+                                <p className="text-[#EB0E23] text-xs mt-1">{errors?.code}</p>
+                            </div> : 
+                            <input
+                                type="text"
+                                name="phone"
+                                className="placeholder-opacity-25 w-full py-4 px-5 text-xs tracking-widest"
+                                placeholder="شماره تلفن را وارد کنید"
+                                onChange={handleChange}
+                                value={phonNumber.phone}
+                            />
+                        }
                         </div>
                     </form>
-                    <div className={styles.forget + " w-1/2 max-md:w-11/12 mt-4"}>
-                        <Link to={"/forgot-pass"}>
-                            <p className="text-xs text-right">
-                                رمز عبور خود را فراموش کردید؟
-                            </p>
-                        </Link>
-                    </div>
                     <div className={styles.button + " w-1/2 max-md:w-11/12 mt-5 flex justify-between items-center flex-col gap-4"}>
-                        <div className="grid w-full" onClick={handleSubmit}>
+                        <div className="grid w-full" onClick={handlePhoneSubmit}>
                             <SecondPrimaryButton>
-                                ورود
+                                تایید
                             </SecondPrimaryButton>
                         </div>
                         <div className="grid w-full">
-                            <Link to={"/signin"}>
+                            <Link to={"/login"}>
                                 <OutlineBlackButton>
-                                    ثبت نام
+                                    صفحه ورود
                                 </OutlineBlackButton>
                             </Link>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     )
 }
 
-export default Login;
+export default ForgotPass;

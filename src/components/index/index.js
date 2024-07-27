@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Hero from "./hero";
-import { SpecialSaleBanner } from "../banner";
 import { BlackButton, PrimaryArrowButton } from "../button";
 import Category from "./category";
 import Branch from "./branch";
@@ -12,6 +11,7 @@ import { getAllBlogs } from "../../api/blog";
 import SecondActiveShopItem from "../shop/secondActiveShopItem";
 import { getAllProducts } from "../../api/shop";
 import { Link } from "react-router-dom";
+import { MobileSpecialBanner, SpecialSaleBanner } from "../banner";
 
 const HomePage = () => {
 
@@ -110,13 +110,30 @@ const HomePage = () => {
     return(
         <div>
             <Hero />
-            <SpecialSaleBanner />
+
+
+            {isMobile === false ? 
+                <SpecialSaleBanner /> : 
+                <MobileSpecialBanner />
+            }
+            
 
 
 
             <div className={styles.bestSellers + " container w-11/12 max-w-7xl mx-auto mt-20"}>
-                <div className={styles.headingTitle + " mb-7"}>
-                    <p className="text-lg font-bold relative max-md:text-center">
+                <div className={styles.headingTitle + " mb-7 flex items-center justify-between"}>
+                    {/* <Link className="text-xs text-[#E14957]" to={"/shop"}>
+                        مشاهده همه محصولات
+                    </Link> */}
+                    <Link to="/shop">
+                        <BlackButton>
+                                فروشگاه 
+                            <svg className="max-md:w-4" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+                                <path d="M8.22674 16.0144L10.8622 13.3667L12.4796 11.75C13.1611 11.0654 13.1611 9.95192 12.4796 9.26731L8.22675 4.99469C7.66845 4.43381 6.71606 4.83798 6.71606 5.62156L6.71606 10.2489L6.71606 15.3875C6.71606 16.1794 7.66845 16.5753 8.22674 16.0144Z" fill="white"/>
+                            </svg>
+                        </BlackButton>
+                    </Link>
+                    <p className="text-2xl max-md:text-sm font-bold relative max-md:text-center">
                         محصولات پرفروش ربانی پارت 
                     </p>
                 </div>
@@ -135,14 +152,7 @@ const HomePage = () => {
                     }
                 </div>
                 <div className={styles.button + " mt-10"}>
-                        <Link to="/shop">
-                            <BlackButton>
-                                فروشگاه 
-                                <svg className="max-md:w-4" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
-                                    <path d="M8.22674 16.0144L10.8622 13.3667L12.4796 11.75C13.1611 11.0654 13.1611 9.95192 12.4796 9.26731L8.22675 4.99469C7.66845 4.43381 6.71606 4.83798 6.71606 5.62156L6.71606 10.2489L6.71606 15.3875C6.71606 16.1794 7.66845 16.5753 8.22674 16.0144Z" fill="white"/>
-                                </svg>
-                            </BlackButton>
-                        </Link>
+
                 </div>
             </div>
 
@@ -174,13 +184,21 @@ const HomePage = () => {
 
 
             <div className={styles.indexBlog + " container max-w-7xl w-11/12 mx-auto mt-20"} style={{direction : "rtl"}}>
-                <div className={styles.headingTitle + " mb-7"}>
-                    <p className="text-lg font-bold relative">
+                <div className={styles.headingTitle + " mb-7 flex items-center justify-between"}>
+                    <p className="text-2xl max-md:text-sm font-bold relative">
                         با ربانی پارت به روز باشید 
                     </p>
+                    <Link to="/blog">
+                        <BlackButton>
+                                مشاهده وبلاگ 
+                            <svg className="max-md:w-4" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+                                <path d="M8.22674 16.0144L10.8622 13.3667L12.4796 11.75C13.1611 11.0654 13.1611 9.95192 12.4796 9.26731L8.22675 4.99469C7.66845 4.43381 6.71606 4.83798 6.71606 5.62156L6.71606 10.2489L6.71606 15.3875C6.71606 16.1794 7.66845 16.5753 8.22674 16.0144Z" fill="white"/>
+                            </svg>
+                        </BlackButton>
+                    </Link>
                 </div>
                 {isMobile === false ?
-                    <div className="grid grid-rows-4 max-w-4xl mx-auto grid-cols-2 max-md:flex max-md:flex-col  gap-4" style={{direction: "ltr"}}>
+                    <div className="grid grid-rows-4 mx-auto grid-cols-2 max-md:flex max-md:flex-col  gap-4" style={{direction: "ltr"}}>
                         {/* {blogs?.map((item) => (
                             <BlogItem accept={item?.accept} desc={item?.description} body={item?.body} created_at={item?.created_at} id={item?.id} image={item?.image} slug={item?.slug} status={item?.status} suggest={item?.suggest} time={item?.time} title={item?.title} updated_at={item?.updated_at} user_id={item?.user_id} />
                         ))} */}
@@ -244,7 +262,7 @@ const HomePage = () => {
             {/* <Category data={categories} /> */}
             <Branch />
 
-            <div className={styles.indexBottomVector + " container w-11/12 mx-auto mt-20 max-w-5xl overflow-hidden"}>
+            <div className={styles.indexBottomVector + " container w-11/12 mx-auto mt-20 max-w-7xl overflow-hidden"}>
                 <img className="object-contain w-full" src="../../images/indexbottomvector.png" alt="vector" />
             </div>
 

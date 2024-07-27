@@ -55,7 +55,10 @@ const InternationalSell = () => {
 
     return(
         <div className={styles.internationalSell + " mt-40 mb-20 max-md:mt-20"}>
-            <div className={styles.container + " container w-11/12 mx-auto overflow-hidden"}>
+            <div className={styles.container + " container max-w-7xl w-11/12 mx-auto overflow-hidden"}>
+                <div className="w-full overflow-hidden rounded-lg mb-10">
+                    <img src="../../images/internationalbanner.png" alt="image" />
+                </div>
                 <div className={styles.title + " mb-10"}>
                     <p className="font-bold text-xl">
                         خرید خارجی (بین المللی ) 
@@ -66,9 +69,9 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input 
                                 name="name"
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
-                                placeholder="نام نام خانوادگی " 
+                                placeholder="نام و نام خانوادگی " 
                                 value={formData.name}
                                 onChange={handleChange}
                             />
@@ -76,7 +79,7 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input 
                                 name="phone"    
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
                                 placeholder="شماره تماس " 
                                 value={formData.phone}
@@ -88,7 +91,7 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input
                                 name="product_name" 
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
                                 placeholder="نام کالا " 
                                 value={formData.product_name}
@@ -98,7 +101,7 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input 
                                 name="car_type"
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
                                 placeholder="نوع خودرو" 
                                 value={formData.car_type}
@@ -110,7 +113,7 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input 
                                 name="car_production_year"
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
                                 placeholder="سال تولید" 
                                 value={formData.car_production_year}
@@ -120,7 +123,7 @@ const InternationalSell = () => {
                         <div className="w-1/2 max-md:w-full">
                             <input 
                                 name="car_chassi_number"
-                                className="p-2 w-full bg-[#C8C8C8]" 
+                                className="p-2 w-full bg-[#EEEEEE]" 
                                 type="text" 
                                 placeholder="شماره شاسی خودرو " 
                                 value={formData.car_chassi_number}
@@ -132,7 +135,7 @@ const InternationalSell = () => {
                         <textarea 
                             name="body"
                             style={{resize : "none"}} 
-                            className="w-full p-2 w-full bg-[#C8C8C8]" 
+                            className="w-full p-2 w-full bg-[#EEEEEE]" 
                             rows={10} 
                             placeholder="عنوان سفارش با توضیحات :" 
                             value={formData.body}

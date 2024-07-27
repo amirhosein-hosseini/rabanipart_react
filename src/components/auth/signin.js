@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
 import { OutlineBlackButton, SecondPrimaryButton } from "../button";
@@ -14,9 +14,10 @@ const Login = () => {
     const [showPass , setShowPass] = useState("password");
     const [showConfPass , setShowConfPass] = useState("password");
     const [showSendCode , setShowSendCode] = useState(false);
+    const [navigateToCode, setNavigateToCode] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
-        email: "",
+        email: null,
         password: "",
         confirmed: "",
         phone: "",
@@ -65,23 +66,36 @@ const Login = () => {
 
         axios.post(url + "/" + prefix + '/auth/register', formData)
             .then((response) => {
-                // axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
-                // setShowSendCode(true)
                 setErrors(response?.data?.data?.errors);
-                if(errors === undefined){
-                    axios.post(url + "/" + prefix + '/auth/send-code', {phone: formData?.phone , code:codeData?.code, type: "register"})
-                    setShowSendCode(true)
+                if(response.status === 200){
+                    setNavigateToCode(true);
                 }
             })
             .catch((error) => {
                 // setError(error.response.data)
+                toast.error(error.response.data.massage)
             })
             .finally(() => {
                 console.log("final")
             });
     };
 
-    console.log(errors)
+    useEffect(() => {
+        if (navigateToCode && errors === undefined) {
+            goToCode();
+        }
+    }, [navigateToCode, errors]);
+
+
+    const goToCode = () => {
+        axios.post(url + "/" + prefix + '/auth/send-code', { phone: formData?.phone, code: codeData?.code, type: "register" })
+            .then(() => {
+                setShowSendCode(true);
+            })
+            .catch((error) => {
+                toast.error(error.response.data.message);
+        });
+    }
 
 
     const handleCodeSubmit = (e) => {

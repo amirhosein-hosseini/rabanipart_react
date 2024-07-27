@@ -48,9 +48,9 @@ const Basket = () => {
                 </div>
                 <div className={styles.basketWrapper + " flex max-md:flex-col-reverse items-start p-5 gap-10 justify-between mt-10"}>
                     <div className={styles.desc + " w-1/3 max-md:w-full flex flex-col justify-center items-center"}>
-                        <div className={styles.image}>
+                        {/* <div className={styles.image}>
                             <img src="../../images/basketvector.png" alt="image" />
-                        </div>
+                        </div> */}
                         <div className={styles.total + " w-full border border-[#9C9C9C] rounded-lg mt-5"}>
                             <div className={styles.container + " p-3 flex flex-col gap-2 mb-2"}>
                                 <div className={styles.item + " flex justify-between"}>
@@ -59,7 +59,7 @@ const Basket = () => {
                                 </div>
                                 <div className={styles.item + " flex justify-between"}>
                                     <p className="text-xs">{formatNumberWithThousandSeparator(cartItems?.total_price_with_tax)} <span className="text-xs">تومان</span> </p>
-                                    <p className="text-xs">قیمت با مالیاب بر ارزش افزوده</p>
+                                    <p className="text-xs">قیمت با مالیات بر ارزش افزوده</p>
                                 </div>
                             </div>
                             <Link to={"/payment"}>

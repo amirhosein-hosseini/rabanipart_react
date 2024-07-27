@@ -1,3 +1,27 @@
+@keyframes movingAnimation {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(30px, 30px); // Move diagonally to the right and down
+    }
+    50% {
+      transform: translate(70px, 0); // Move horizontally to the right
+    }
+    75% {
+      transform: translate(30px, -30px); // Move diagonally to the right and up
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+}
+
+.shopMoving{
+    animation: movingAnimation 6s infinite; 
+}
+
+
+
 .shopItem{
     // .footer{
     //     margin-top: -10%;
@@ -75,5 +99,6 @@
 .shopArchiveContainer .items{
     direction: rtl;
 }
+
 
 

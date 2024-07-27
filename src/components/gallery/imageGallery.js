@@ -42,8 +42,11 @@ const MyImageGallery = ({data}) => {
 
 
     return(
-        <div>
+        <div className="relative">
             <ImageGallery items={images} />
+            <div className="absolute left-[50%] top-[50%] w-[50%] h-[50%]" style={{transform: "translate(-50%,-50%"}}>
+                <img className="w-full" src="../../images/watermark.png" alt="image" />
+            </div>
         </div>
     )
 }

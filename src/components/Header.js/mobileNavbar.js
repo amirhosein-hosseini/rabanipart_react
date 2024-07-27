@@ -21,7 +21,7 @@ const MobileNavbar = () => {
 
     return(
         <>
-            <div className={styles.mobileNavbar + " md:hidden bg-[#F4F4F4] fixed z-30 w-11/12 rounded-xl flex items-center justify-between p-2 py-[6px]"}>
+            <div className={styles.mobileNavbar + " md:hidden bg-[#F4F4F4] relative z-30 w-11/12 rounded-xl flex items-center justify-between p-2 py-[6px]"}>
                 <div className={styles.item + "  max-w-[14px] overflow-hidden"}>
                     <img className="object-cover w-full" src="../../images/mobilecall.png" alt="icon" onClick={handleCall} />
                     {/* <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -71,8 +71,8 @@ const MobileNavbar = () => {
                         <Link to={"/shop"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>فروشگاه</Link>
                         <Link to={"/blog"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>بلاگ</Link>
                         <Link to={"/international-sell"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>خرید بین المللی</Link>
-                        <Link to={"/"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>درباره ما</Link>
-                        <Link to={"/"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>تماس باما</Link>
+                        <Link to={"/about"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>درباره ما</Link>
+                        <Link to={"/contact"} onClick={() => setShowMobileNavbar(!showMobileNavbar)}>تماس باما</Link>
                         {isLoggedIn === true ? 
                             <Link to={"/basket"} className="flex items-center gap-2" onClick={() => setShowMobileNavbar(!showMobileNavbar)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 29 28" fill="none">

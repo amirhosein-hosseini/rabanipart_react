@@ -11,6 +11,16 @@ export const SpecialSaleBanner  = () => {
     )
 }
 
+export const MobileSpecialBanner  = () => {
+    return(
+        <div className="w-full overflow-hidden">
+            <Link to={"/special/123"}>
+                <img className="object-cover w-full" src="../../images/mobilespecialbanner.png" alt="image" />
+            </Link>
+        </div>
+    )
+}
+
 
 
 export const WebsiteBanner  = () => {

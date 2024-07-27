@@ -195,14 +195,19 @@ const ShopArchive = () => {
     
 
     return(
-        <div className={styles.shopArchive + " flex flex-col gap-20 max-md:gap-5 mb-10 mt-20"}>
+        <div className={styles.shopArchive + " flex flex-col gap-20 max-md:gap-5 mb-10 mt-20 max-md:mt-0"}>
 
-            <SpecialSaleBanner />
+            <div className="mt-20 mb-20 mx-auto container w-11/12 mx-auto">
+                <div className="w-full relative mx-auto flex items-center justify-center">
+                    <img src="../../images/shopBanner.png" alt="image" />
+                    <div className="absolute top-[50%] left-20 max-md:left-0" style={{transform: "translate(0,-50%)"}}>
+                        <img className={styles.shopMoving + " max-w-[370px] max-md:max-w-[150px]"} src="../../images/shoprideimage.png" alt="image" />
+                    </div>
+                </div>
+            </div>
 
-            <WebsiteBanner />
 
-
-            <div className={styles.shopArchiveContainer + " flex max-md:flex-col-reverse items-start gap-7 max-md:gap-5 container w-11/12 mx-auto mt-10 max-md:mt-4"}>
+            <div className={styles.shopArchiveContainer + " flex max-md:flex-col-reverse items-start gap-7 max-md:gap-5 container w-11/12 mx-auto mt-10 max-md:mt-0"}>
                 <div className={styles.items + " w-3/4 max-md:w-full grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-1"}>
                     {products?.map((item) => 
                     

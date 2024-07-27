@@ -4,7 +4,6 @@ import { DeRedPrimaryButton, RedPrimaryButton, SecondPrimaryButton } from "../bu
 import ActiveShopItem from "./activeShopItem";
 import Faq from "../faq";
 import MyImageGallery from "../gallery/imageGallery";
-import { SpecialSaleBanner } from "../banner";
 import { Link, useParams } from "react-router-dom";
 import { showProduct } from "../../api/shop";
 import { getUserChassis } from "../../api/user";
@@ -27,12 +26,15 @@ const SingleShop = () => {
     const propUpRef = useRef(null);
     const [reload , setReload] = useState(1);
     const [activeChassi , setActiveChassi] = useState(null);
+    const [copyStatus, setCopyStatus] = useState("کپی لینک");
+    const [showShare , setShowShare] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         number: "",
     });
 
 
+    console.log(data)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -168,11 +170,70 @@ const SingleShop = () => {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    const disableScroll = () => {
+        document.body.style.overflow = 'hidden';
+    };
+
+    const enableScroll = () => {
+        document.body.style.overflow = 'visible';
+    };
+
+    const handleShowShare = (status) => {
+        if (status === true){
+            setShowShare(true)
+            disableScroll()
+        } else if(status === false){
+            setShowShare(false)
+            enableScroll()
+        }
+    }
+
+    const copyLink = async () => {
+        try {
+          // Get the current page URL
+          const currentUrl = window.location.href;
+          
+          // Copy the URL to clipboard
+          await navigator.clipboard.writeText(currentUrl);
+          
+          // Update status to show it was copied
+          setCopyStatus("کپی شد");
+          
+          // Reset status after 2 seconds
+          setTimeout(() => setCopyStatus("کپی لینک"), 5000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+          setCopyStatus('Failed to copy');
+        }
+      };
+    
+
 
 
 
     return(
         <>
+            {showShare === true ? 
+                <div className="absolute top-0 left-0 h-full w-full flex items-center justify-center" style={{ zIndex: '2000', background: "rgb(0,0,0,50%)" }}>
+                    <div className="bg-white max-w-[500px] w-11/12 rounded-lg">
+                        <div className="flex items-center justify-between flex-row-reverse p-4" style={{ borderBottom: "2px solid rgb(0,0,0,40%)" }}>
+                            <p>
+                                اشتراک گزاری
+                            </p>
+                            <svg className="w-3 cursor-pointer" onClick={() => handleShowShare(false)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z" /></svg>
+                        </div>
+                        <div className="p-4">
+                            <p className="text-center text-sm">
+                                لینک را با دوستان خود به اشتراک بگزارید
+                            </p>
+                            <button className="border rounded-lg flex w-full items-center justify-center gap-2 flex-row-rverse mt-4 p-2" style={{ border: "2px solid rgb(0,0,0,40%)" }} onClick={copyLink}>
+                                {copyStatus}
+                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M208 0L332.1 0c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9L448 336c0 26.5-21.5 48-48 48l-192 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48zM48 128l80 0 0 64-64 0 0 256 192 0 0-32 64 0 0 48c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 176c0-26.5 21.5-48 48-48z" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div> : ""
+            }
             <div className={styles.singleShop + " relative mb-20 mt-20 max-md:pt-5 max-md:mt-0"}>
 
                 
@@ -287,34 +348,139 @@ const SingleShop = () => {
                         </div>
                     </div> : ""
                 }
-                <div className="max-md:hidden">
+                {/* <div className="max-md:hidden">
                     <SpecialSaleBanner />
-                </div>
+                </div> */}
 
 
-                <div className={styles.container + " container w-11/12 mx-auto flex flex-col gap-20"}>
-                    <div className={styles.image + " flex justify-center gap-10 max-w-5xl mt-20 mx-auto gap-10 items-center max-md:flex-col-reverse max-md:mt-10"}>
-                        {/* <div className={styles.video + " w-1/2 max-md:w-full"}>
-                            <img className="object-cover w-full h-full" src="../../images/video.png" alt="image" />
-                        </div> */}
-                        <div className={styles.gallery + " w-1/2 max-md:w-full"}>
-                            {data?.product?.image != undefined ? <MyImageGallery data={parsToArray(data?.product?.image)} /> : ""}
+                <div className={styles.container + " container w-11/12 max-w-7xl mx-auto flex flex-col gap-20"}>
+                    <div className={styles.image + " flex items-start justify-center gap-10 w-full mt-20 mx-auto gap-10 max-md:flex-col-reverse max-md:mt-10"}>
+                        <div className={styles.description + " flex flex-col gap-8 w-2/5 max-md:w-full"}>
+
+
+                            <div className={styles.share + " flex items-center gap-3 w-full"}>
+                                <div className={styles.socials + " w-4/5 flex flex-row-reverse items-center justify-between px-4 py-2 rounded-lg border border-[#E2E4E7]"}>
+                                    <p>
+                                        اشتراک گذاری:
+                                    </p>
+                                    <div className="flex items-center gap-3">
+                                        <div>
+                                            <svg onClick={() => handleShowShare(true)} className="w-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-1/5 px-4 py-2 border border-[#E2E4E7] rounded-lg flex items-center justify-center">
+                                    <svg className="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg>
+                                </div>
+                            </div>
+
+
+                            <div className={styles.descPrice + " p-4 rounded-lg border border-[#E2E4E7]"}>
+                                <div>
+                                    <div className="flex flex-col items-center justify-center gap-2 mb-2">
+                                        <p className="text-xl max-md:text-lg">
+                                            قیمت محصول      
+                                        </p>
+                                        <p className="font-bold text-xl max-md:text-lg">{formatNumberWithThousandSeparator(data?.product?.offPrice)} تومان</p>
+                                    </div>
+                                    <div className={styles.buttons + " flex items-center gap-2 w-full pt-3 border-t border-t-[#E2E4E7]"}>
+                                        <div className="w-1/5">
+                                            <button className="w-full bg-[#E14957] p-2 rounded-lg flex items-center justify-center">
+                                                <svg className="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#ffffff" d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>                                            
+                                            </button>
+                                        </div>
+
+                                        <div className="w-4/5">
+                                            {data?.product?.need_shasi === 0 && isLoggedIn === false?
+                                                <div  onClick={handleAddToCart}>
+                                                    <Link to={"/login"}>
+                                                        <button className="w-full bg-[#E14957] p-2 rounded-lg flex items-center justify-center text-white text-sm">
+                                                            افزودن به سبد خرید 
+                                                        </button>
+                                                    </Link>
+                                                </div>
+                                                : 
+                                                data?.product?.need_shasi === 0 && isLoggedIn === true ?
+                                                <div  onClick={handleAddToCart}>
+                                                    <button className="w-full bg-[#E14957] p-2 rounded-lg flex items-center justify-center text-white text-sm">
+                                                        افزودن به سبد خرید 
+                                                    </button>
+                                                </div> : 
+
+                                                <div onClick={addToCart}>
+                                                    <button className="w-full bg-[#E14957] p-2 rounded-lg flex items-center justify-center text-white text-sm">
+                                                        افزودن به سبد خرید 
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.intro + " p-4 rounded-lg border border-[#E2E4E7]"}>
+                                <p className="font-bold">
+                                    جزییات محصول
+                                </p>
+                                <div className="flex flex-col gap-2 mt-5">
+                                    <div className="flex items-center justify-between flex-row-reverse pb-3 border-b border-b-[#E7E2E2]">
+                                        <div>
+                                            <p>
+                                                دسته بندی
+                                            </p>
+                                        </div>
+                                        <div>
+                                            {data?.product?.category[0]?.name}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between flex-row-reverse pb-3 border-b border-b-[#E7E2E2]">
+                                        <div>
+                                            <p>
+                                                برند
+                                            </p>
+                                        </div>
+                                        <div>
+                                            {data?.product?.brand[0]?.name}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between flex-row-reverse">
+                                        <div>
+                                            <p>
+                                                گارانتی سلامت فیزیکی کالا
+                                            </p>
+                                        </div>
+                                        <div>
+                                            دارد 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.gallery + " w-3/5 max-md:w-full max-md:mt-10"}>
+                            <div className="p-4 rounded-lg border border-[#E2E4E7] mb-4">
+                                <p className="font-bold">
+                                    {data?.product?.title}
+                                </p>
+                            </div>
+                            <div>
+                                {data?.product?.image != undefined ? <MyImageGallery data={parsToArray(data?.product?.image)} /> : ""}
+                            </div>
                         </div>
                     </div>
 
 
                     <div className={styles.desc + " flex flex-col gap-7"}>
-                        <p className={styles.title + " font-bold text-xl max-md:text-lg max-md:mb-6"}>
+                        {/* <p className={styles.title + " font-bold text-xl max-md:text-lg max-md:mb-6"}>
                             {data?.product?.title}
-                        </p>
-                        <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#8F8F8F] rounded-xl py-10 px-4 max-md:border-none"}>
+                        </p> */}
+                        <div className={styles.desc + "  flex flex-col gap-8 relative border border-[#E2E4E7] rounded-xl py-10 px-4 max-md:border-none"}>
                             {/* <div className="max-md:text-sm" dangerouslySetInnerHTML={{ __html: data?.product?.body}}>میل لنگ محور اصلی محرک موتور هر خودرو میباشد  که توسط شاتون ها به حرکت در میآیند و نیرو را از موتور به گیربکس و سپس به دیفرانسیل و در نهایت به چرخ ها منتقل میکند تا خودرو به حرکت دربیاید</div> */}
                             <div className={styles.desc} dangerouslySetInnerHTML={{ __html: data?.product?.review[0]?.body}}></div>
                             {/* <p className="max-md:text-sm">{data?.product?.body}</p> */}
                             <div className={styles.footer + " flex max-md:flex-col-reverse items-center justify-between"}>
                                 <div className="max-md:flex max-md:flex-row-reverse max-md:justify-between max-md:items-center max-md:w-full">
-                                    <p className="font-bold">{formatNumberWithThousandSeparator(data?.product?.offPrice)} تومان</p>
-                                    {data?.product?.need_shasi === 0 && isLoggedIn === false?
+                                    {/* <p className="font-bold">{formatNumberWithThousandSeparator(data?.product?.offPrice)} تومان</p> */}
+                                    {/* {data?.product?.need_shasi === 0 && isLoggedIn === false?
                                         <div  onClick={handleAddToCart}>
                                             <Link to={"/login"}>
                                                 <RedPrimaryButton>
@@ -335,7 +501,7 @@ const SingleShop = () => {
                                                 افزودن به سبد خرید 
                                             </RedPrimaryButton>
                                         </div>
-                                    }
+                                    } */}
 
                                 </div>
                                 <div className="flex flex-col gap-2 max-md:w-full max-md:mb-5">
